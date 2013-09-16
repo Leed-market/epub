@@ -9,7 +9,7 @@
 */
 
 /** Includes **/
-include_once("PHPePub/EPub.250.php");
+include_once("./plugins/epub/PHPePub/EPub.250.php");
 
 /** Epub configuration **/
 define("EPUBFILE_HEAD_START",
