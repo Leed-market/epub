@@ -3,7 +3,7 @@
 @name Epub
 @author Adrien Dorsaz <adrien@adorsaz.ch>
 @link https://www.adorsaz.ch
-@licence GPLV3
+@licence Need to be chosen
 @version 1.0.0
 @description Le plugin Epub est un plugin qui permet de télécharger vos articles au format epub
 */
