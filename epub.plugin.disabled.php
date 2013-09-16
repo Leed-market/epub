@@ -8,6 +8,30 @@
 @description Le plugin Epub est un plugin qui permet de télécharger vos articles au format epub
 */
 
+/** Includes **/
+include_once("PHPePub/EPub.250.php");
+
+/** Epub configuration **/
+define("EPUBFILE_HEAD_START",
+"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+. "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"\n"
+. " \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n"
+. "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+. "<head>"
+. "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n"
+//. "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles.css\" />\n" // TODO : add Leed style ?
+. "<title>");
+
+$epubfile_title = "Title to be defined";
+
+define("EPUBFILE_HEAD_END",
+"</title>\n"
+. "</head>\n"
+. "<body>\n");
+
+define("EPUBFILE_END",
+"</body>\n"
+."</html>\n");
 
 
 /* Menu pour télécharger les fichiers Epub en page d'accueil */
