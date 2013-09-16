@@ -33,6 +33,25 @@ define("EPUBFILE_END",
 "</body>\n"
 ."</html>\n");
 
+// affichage d'un lien dans le menu "Gestion"
+/*function epub_plugin_configlinkmenu(){
+	echo '<li><a class="toggle" href="#epub">Gérer les Epub</a></li>';
+}*/
+
+// formulaire de configuration de la génération d'Epub
+/*function epub_plugin_settings(){
+	echo '  <section id="epub" name="epub" class="epub">
+                <h2>Configuration des fichiers Epub</h2>
+                <form action="settings.php#epub" method="post">
+                    <label id="textonly">Fichiers externes :</label>
+                    <select name="textonly">
+                        <option value="textonly">Texte uniquement</option>
+                        <option value="all">Tous les contenus</option>
+                    </select>
+                    <button type="submit">Sauver</button>
+                </form>
+            </section>';
+}*/
 
 /* Menu pour télécharger les fichiers Epub en page d'accueil */
 function epub_plugin_menu(&$myUser){
