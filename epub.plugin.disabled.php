@@ -9,29 +9,17 @@
 */
 
 
+
+/* Menu pour télécharger les fichiers Epub en page d'accueil */
 function epub_plugin_menu(&$myUser){
-	/* Ajoutez un code qui s'executera après le menu des flux ex :
-	
-	echo '<aside class="epubMenu">
-				
-				<h3 class="left">A lire</h3>
-					<ul class="clear">  							  								  							  							  								  	
-					<li>
-						<ul> 
-							<li> 
-								<img src="plugins/epub/img/read_icon.png">
-								
-									<a href="action.php?action=epub_action">'.Functions::truncate("Hourra pour Leed et vive les navets!!",30).'</a>
-										  
-								<button class="right" onclick="epub_javascript()" style="margin-left:10px;">
-									<span>Pouet</span>
-								</button>
-								</li>
-						</ul>
-					</li>
-				</ul>
+	echo '<aside class="epubMenu clear">
+				<h3 class="left">Epubs</h3>
+                <div class="right" style="margin-top:20px;">
+                    <a class="button" href="action.php?action=epub_unread">'.Functions::truncate("Non lu",30).'</a>
+                    <a class="button" href="action.php?action=epub_favorites">'.Functions::truncate("Favoris",30).'</a>
+                </div>
+                <div class="clear"></div>
 			</aside>';
-		*/	
 }
 
 /* Création et envoi des fichiers Epub */
