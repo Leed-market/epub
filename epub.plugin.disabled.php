@@ -34,20 +34,32 @@ function epub_plugin_menu(&$myUser){
 		*/	
 }
 
+/* Création et envoi des fichiers Epub */
 function epub_plugin_action($_,$myUser){
-
-	/* Ajoutez un code qui s'executera en tant qu'action ex : 
-	
-	if($_['action']=='epub_action'){
-		if($myUser==false) exit('Vous devez vous connecter pour cette action.');
-		if($_['state']=='add'){
-			$return = mysql_query('INSERT INTO '.MYSQL_PREFIX.'plugin_feaditlater (event)VALUES(\''.$_['id'].'\')');
-		}else{
-			$return = mysql_query('DELETE FROM '.MYSQL_PREFIX.'plugin_feaditlater WHERE event=\''.$_['id'].'\'');
-		}
-		if(!$return) echo mysql_error();
-	}
-	*/
+    if($myUser==false){
+        exit('Vous devez vous connecter pour cette action.');
+    }
+    else{
+        $requete = 'SELECT id,title,guid,content,description,link,pubdate,unread,favorite
+                    FROM '.MYSQL_PREFIX.'event
+                    WHERE ';
+        if($_['action']=='epub_unread'){
+            $requete.='unread=1';
+        }elseif($_['action']=='epub_favorites'){
+            $requete.='favorite=1';
+        }
+        $query = mysql_query($requete);
+        // TODO Create EPUB here
+        if($query){
+            while($data=mysql_fetch_array($query)){
+                // TODO Add chapters here
+                echo $data['id'];
+            }
+            // TODO Finalize EPUB and send it
+        }else{
+            echo mysql_error();
+        }
+    }
 }
 
 /* Ajout du css du epub en en tête de leed
