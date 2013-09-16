@@ -97,13 +97,15 @@ function epub_plugin_action($_,$myUser){
       - par défaut, s'il existe, le fichier default.css est ajouté
       - par défaut, s'il existe, le fichier "nomDuTheme".css est ajouté
       - si vous souhaitez inclure un fichier css supplémentaire (pour tous les thèmes) */
-//Plugin::addCss("/css/style.css"); 
+//Plugin::addCss("/css/epub.css");
 
 //Ajout du javascript du epub au bas de page de leed
-Plugin::addJs("/js/main.js"); 
- 
-//Ajout de la fonction epub_plugin_displayEvents au Hook situé après le menu des flux
-Plugin::addHook("menu_post_folder_menu", "epub_plugin_menu");  
-//Ajout de la fonction epub_plugin_action à la page action de leed qui contient tous les traitements qui n'ont pas besoin d'affichage (ex :supprimer un flux, faire un appel ajax etc...)
-Plugin::addHook("action_post_case", "epub_plugin_action");  
+//Plugin::addJs("/js/epub.js");
+
+// Ajout de la fonction epub_plugin_configlinkmenu au Hook situé dans le menu de gestion
+//Plugin::addHook("setting_post_link", "epub_plugin_configlinkmenu");
+// Ajout de la fonction epub_plugin_displayEvents au Hook situé après le menu des flux
+Plugin::addHook("menu_post_folder_menu", "epub_plugin_menu");
+// Ajout de la fonction epub_plugin_action à la page action de leed qui contient tous les traitements qui n'ont pas besoin d'affichage (ex :supprimer un flux, faire un appel ajax etc...)
+Plugin::addHook("action_post_case", "epub_plugin_action");
 ?>
