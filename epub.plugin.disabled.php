@@ -2,8 +2,9 @@
 /*
 @name Epub
 @author Adrien Dorsaz <adrien@adorsaz.ch>
-@link https://www.adorsaz.ch
-@licence Need to be chosen
+@link https://redmine.adorsaz.ch/projects/leed-market_
+@link git://adorsaz.ch/leed-market.git
+@licence LGPLv3
 @version 1.0.0
 @description Le plugin Epub est un plugin qui permet de télécharger vos articles au format epub
 */
