@@ -12,7 +12,7 @@
 include_once("./plugins/epub/PHPePub/EPub.250.php");
 
 /** Epub configuration **/
-define("EPUBFILE_HEAD_START",
+define("EPUBBOOK_HEAD_START",
 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
 . "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"\n"
 . " \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n"
@@ -22,14 +22,12 @@ define("EPUBFILE_HEAD_START",
 //. "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles.css\" />\n" // TODO : add Leed style ?
 . "<title>");
 
-$epubfile_title = "Title to be defined";
-
-define("EPUBFILE_HEAD_END",
+define("EPUBBOOK_HEAD_END",
 "</title>\n"
 . "</head>\n"
 . "<body>\n");
 
-define("EPUBFILE_END",
+define("EPUBBOOK_END",
 "</body>\n"
 ."</html>\n");
 
