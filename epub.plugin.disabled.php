@@ -8,6 +8,12 @@
 @description Le plugin Epub est un plugin qui permet de télécharger vos articles au format epub
 */
 
+/**
+ * List of TODOs :
+ *  - TODO L10N : marks TODO when localisation on Leed is done.
+ *  - TODO PHP 5.5.0 : marks TODO when php functions will be depreciated
+ * */
+
 /** Includes **/
 include_once("./plugins/epub/PHPePub/EPub.250.php");
 
@@ -19,7 +25,7 @@ define("EPUBBOOK_HEAD_START",
 . "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
 . "<head>"
 . "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n"
-//. "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles.css\" />\n" // TODO : add Leed style ?
+//. "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles.css\" />\n" // TODO : add Leed css ?
 . "<title>");
 
 define("EPUBBOOK_HEAD_END",
@@ -32,6 +38,7 @@ define("EPUBBOOK_END",
 ."</html>\n");
 
 /* Menu pour télécharger les fichiers Epub en page d'accueil */
+// TODO L10N
 function epub_plugin_menu(&$myUser){
 	echo '<aside class="epubMenu clear">
 				<h3 class="left">Epubs</h3>
@@ -56,6 +63,7 @@ function epub_plugin_menu(&$myUser){
 }
 
 /* Création et envoi des fichiers Epub */
+// TODO L10N
 function epub_plugin_action($_,$myUser){
     if($myUser==false){
         exit('Vous devez vous connecter pour cette action.');
