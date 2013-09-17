@@ -35,10 +35,22 @@ define("EPUBBOOK_END",
 function epub_plugin_menu(&$myUser){
 	echo '<aside class="epubMenu clear">
 				<h3 class="left">Epubs</h3>
-                <div class="right" style="margin-top:20px;">
-                    <a class="button" href="action.php?action=epub_unread">'.Functions::truncate("Non lu",30).'</a>
-                    <a class="button" href="action.php?action=epub_favorites">'.Functions::truncate("Favoris",30).'</a>
-                </div>
+                <ul style="font-size:0.8em;">
+                    <li class="clear">
+                        Textes seulement (+ rapide)
+                        <span class="right">
+                            <a class="button" href="action.php?action=epub_unread_text">'.Functions::truncate("Non lu",30).'</a>
+                            <a class="button" href="action.php?action=epub_favorites_text">'.Functions::truncate("Favoris",30).'</a>
+                        </span>
+                    </li>
+                    <li class="clear">
+                        Articles entiers (+ lent)
+                        <span class="right">
+                            <a class="button" href="action.php?action=epub_unread_full">'.Functions::truncate("Non lu",30).'</a>
+                            <a class="button" href="action.php?action=epub_favorites_full">'.Functions::truncate("Favoris",30).'</a>
+                        </span>
+                    </li>
+                </ul>
                 <div class="clear"></div>
 			</aside>';
 }
