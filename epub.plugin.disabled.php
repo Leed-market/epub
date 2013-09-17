@@ -31,26 +31,6 @@ define("EPUBBOOK_END",
 "</body>\n"
 ."</html>\n");
 
-// affichage d'un lien dans le menu "Gestion"
-/*function epub_plugin_configlinkmenu(){
-	echo '<li><a class="toggle" href="#epub">Gérer les Epub</a></li>';
-}*/
-
-// formulaire de configuration de la génération d'Epub
-/*function epub_plugin_settings(){
-	echo '  <section id="epub" name="epub" class="epub">
-                <h2>Configuration des fichiers Epub</h2>
-                <form action="settings.php#epub" method="post">
-                    <label id="textonly">Fichiers externes :</label>
-                    <select name="textonly">
-                        <option value="textonly">Texte uniquement</option>
-                        <option value="all">Tous les contenus</option>
-                    </select>
-                    <button type="submit">Sauver</button>
-                </form>
-            </section>';
-}*/
-
 /* Menu pour télécharger les fichiers Epub en page d'accueil */
 function epub_plugin_menu(&$myUser){
 	echo '<aside class="epubMenu clear">
@@ -91,17 +71,7 @@ function epub_plugin_action($_,$myUser){
     }
 }
 
-/* Ajout du css du epub en en tête de leed
-      - par défaut, s'il existe, le fichier default.css est ajouté
-      - par défaut, s'il existe, le fichier "nomDuTheme".css est ajouté
-      - si vous souhaitez inclure un fichier css supplémentaire (pour tous les thèmes) */
-//Plugin::addCss("/css/epub.css");
 
-//Ajout du javascript du epub au bas de page de leed
-//Plugin::addJs("/js/epub.js");
-
-// Ajout de la fonction epub_plugin_configlinkmenu au Hook situé dans le menu de gestion
-//Plugin::addHook("setting_post_link", "epub_plugin_configlinkmenu");
 // Ajout de la fonction epub_plugin_displayEvents au Hook situé après le menu des flux
 Plugin::addHook("menu_post_folder_menu", "epub_plugin_menu");
 // Ajout de la fonction epub_plugin_action à la page action de leed qui contient tous les traitements qui n'ont pas besoin d'affichage (ex :supprimer un flux, faire un appel ajax etc...)
