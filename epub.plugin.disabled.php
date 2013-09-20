@@ -77,12 +77,14 @@ function epub_plugin_action($_,$myUser){
         $epubfile_title = "Title to be defined";
 
         if(strpos($_['action'],'epub_unread')!==false){
-            $requete.='unread=1';
+            $requete .= 'unread=1 ';
             $epubfile_title = 'Articles Leed Non lu - le '.date('d/m/y').' à '.date('H:i');
         }elseif(strpos($_['action'],'epub_favorites')!==false){
-            $requete.='favorite=1';
+            $requete .= 'favorite=1 ';
             $epubfile_title = 'Articles Leed Favoris - le '.date('d/m/y').' à '.date('H:i');
         }
+        
+        $requete .= 'ORDER BY pubdate DESC';
         
         $query = mysql_query($requete); // TODO PHP 5.5.0, remove this function to use mysqli_query or PDO
 
