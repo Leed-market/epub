@@ -6,7 +6,7 @@
 @link git://adorsaz.ch/leed-market.git
 @licence LGPLv3
 @version 1.0.0
-@description Le plugin Epub est un plugin qui permet de télécharger vos articles au format epub
+@description Ce plugin permet de télécharger vos articles au format epub pour une lecture hors-ligne.
 */
 
 /**
