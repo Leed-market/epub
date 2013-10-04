@@ -128,9 +128,13 @@ function create_epub($title, $qry_articles, $external_content){
             if($external_content){
                 $book->addChapter($data['title'], "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_ADD);
             }else{
+
+                // Replace img tags by their alt value if possible (a bug report has been done to add it directly in PHPePub)
+                $html_content = preg_replace('/<\s*?img.*alt="(.*?)".*?>/', '${1}', $html_content);
+                
                 $book->addChapter($data['title'], "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_IGNORE);
             }
-            
+
             $chapNb++;
         }
         
