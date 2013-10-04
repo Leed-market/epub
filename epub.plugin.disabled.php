@@ -122,6 +122,8 @@ function create_epub($title, $qry_articles, $external_content){
                 . '<h2 class="articleTitle">'.$data['title'].'</h2>'
                 . '<h3 class="articleDetails"> par '.$data['creator'].' le '.date("d/m/Y à H:i:s",$data['pubdate']).'</h3>'
                 . $data['content'].constant("EPUBBOOK_END");
+
+            $html_content = fix_tags($html_content);
             
             if($external_content){
                 $book->addChapter($data['title'], "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_ADD);
@@ -140,6 +142,16 @@ function create_epub($title, $qry_articles, $external_content){
     }else{
         echo "Aucun articles à mettre dans le fichier epub.";
     }
+}
+
+// Vérifie et répare les balises pour FBReader
+function fix_tags($str){
+    $fixedstr;
+
+    // Ajout du "/" à la fin de la balise <img/>
+    $fixedstr = preg_replace('/(<\s*?img.*")\s*?>/', '${1} />', $str);
+
+    return $fixedstr;
 }
 
 // Ajout de la fonction epub_plugin_displayEvents au Hook situé après le menu des flux
