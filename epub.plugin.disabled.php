@@ -67,7 +67,7 @@ function epub_plugin_action($_,$myUser){
     if($myUser==false){
         exit('Vous devez vous connecter pour cette action.');
     }
-    else{
+    elseif(strpos($_['action'],'epub_unread')!==false || strpos($_['action'],'epub_favorites')!==false){
         $requete = 'SELECT title,creator,content,pubdate
                     FROM '.MYSQL_PREFIX.'event
                     WHERE ';
