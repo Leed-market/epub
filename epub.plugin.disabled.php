@@ -49,26 +49,30 @@ define("EPUBBOOK_END",
 /* Menu pour télécharger les fichiers Epub en page d'accueil */
 // TODO L10N
 function epub_plugin_menu(&$myUser){
-	echo '<aside class="epubMenu clear">
-				<h3 class="left">Epubs</h3>
-                <ul style="font-size:0.8em;">
-                    <li class="clear">
-                        Textes seulement (+ rapide)
-                        <span class="right">
-                            <a class="button" href="action.php?action=epub_unread_text">'.Functions::truncate("Non lu",30).'</a>
-                            <a class="button" href="action.php?action=epub_favorites_text">'.Functions::truncate("Favoris",30).'</a>
-                        </span>
-                    </li>
-                    <li class="clear">
-                        Articles entiers (+ lent)
-                        <span class="right">
-                            <a class="button" href="action.php?action=epub_unread_full">'.Functions::truncate("Non lu",30).'</a>
-                            <a class="button" href="action.php?action=epub_favorites_full">'.Functions::truncate("Favoris",30).'</a>
-                        </span>
-                    </li>
-                </ul>
+	$configManager = new Configuration();
+	$configManager->getAll();
+
+    if($configManager->get('epub_menu')){
+        echo '<aside class="epubMenu clear">
+                <h3 class="left">Epubs</h3>
+                    <ul style="font-size:0.8em;">';
+                    if($configManager->get('epub_menu_unread')){
+                            echo '<li class="clear">Télécharger les articles non-lus :<br/>
+                                    <a class="button" href="action.php?action=epub_unread_textonly">'.Functions::truncate("Texte seulement",30).'</a>
+                                    <a class="button" href="action.php?action=epub_unread_noimage">'.Functions::truncate("Sans images",30).'</a>
+                                    <a class="button" href="action.php?action=epub_unread_full">'.Functions::truncate("Complet",30).'</a>
+                                    </li>';
+                    }
+                    if($configManager->get('epub_menu_favorites')){
+                            echo '<li class="clear">Télécharger les articles favoris :<br/>
+                                    <a class="button" href="action.php?action=epub_favorites_textonly">'.Functions::truncate("Texte seulement",30).'</a>
+                                    <a class="button" href="action.php?action=epub_favorites_noimage">'.Functions::truncate("Sans images",30).'</a>
+                                    <a class="button" href="action.php?action=epub_favorites_full">'.Functions::truncate("Complet",30).'</a>
+                                    </li>';
+                    }
+                    echo '</ul>
                 <div class="clear"></div>
-			</aside>';
+                </aside>';
     }
 }
 
