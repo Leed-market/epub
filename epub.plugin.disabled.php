@@ -69,6 +69,78 @@ function epub_plugin_menu(&$myUser){
                 </ul>
                 <div class="clear"></div>
 			</aside>';
+    }
+}
+
+/* Ajout du lien pour les configurations dans le menu "Gestion" */
+function epub_plugin_managelink(&$myUser){
+    echo '<li><a class="toggle" href="#epub">Plugin Epub</a></li>';
+}
+
+/* Préférences du plugin */
+function epub_plugin_settings(&$myUser){
+	$configManager = new Configuration();
+	$configManager->getAll();
+    ?>
+    <section id="epub" name="epub" class="epub">
+        <form action="action.php?action=epub_plugin_update" method="POST" style="width:80%;">
+            <h2>Préférences du plugin Epub</h2>
+            <ul>
+                <li>
+                    <label for="epub_version">Version Epub à utiliser pour créer les livres :</label>
+                    <select id="epub_version" name="epub_version">
+                        <option value="2" <?php if($configManager->get('epub_version')==='2') echo 'selected';?>>2</option>
+                        <option value="3" <?php if($configManager->get('epub_version')==='3') echo 'selected';?>>3</option>
+                    </select>
+                </li>
+                <li>
+                    <label for="epub_menu">Afficher un menu sur la droite de la page d'accueil :</label>
+                    <input type="checkbox" id="epub_menu" name="epub_menu" <?php if($configManager->get('epub_menu')) echo 'checked';?>/>
+                    <ul style="margin:0;">
+                        <li>
+                            <label for="epub_menu_unread" >Afficher les lien pour les articles non-lus :</label>
+                            <input type="checkbox" id="epub_menu_unread" name="epub_menu_unread" <?php if($configManager->get('epub_menu_unread')) echo 'checked';?>/>
+                        </li>
+                        <li>
+                            <label for="epub_menu_favorites" >Afficher les lien pour les articles favoris :</label>
+                            <input type="checkbox" id="epub_menu_favorites" name="epub_menu_favorites" <?php if($configManager->get('epub_menu_favorites')) echo 'checked';?>/>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <p style="text-align:right;">
+                <input type="submit" class="button" value="Enregistrer"><br/>
+            </p>
+        </form>
+        <h2>Téléchargement des livres Epub</h2>
+        <ul>
+            <li>Télécharger les articles non-lus :
+                    <a class="button" href="action.php?action=epub_unread_textonly"><?php echo Functions::truncate("Texte seulement",30); ?></a>
+                    <a class="button" href="action.php?action=epub_unread_noimage"><?php echo Functions::truncate("Sans images",30); ?></a>
+                    <a class="button" href="action.php?action=epub_unread_full"><?php echo Functions::truncate("Complet",30); ?></a>
+            </li>
+            <li>Télécharger les articles favoris :
+                    <a class="button" href="action.php?action=epub_favorites_textonly"><?php echo Functions::truncate("Texte seulement",30); ?></a>
+                    <a class="button" href="action.php?action=epub_favorites_noimage"><?php echo Functions::truncate("Sans images",30); ?></a>
+                    <a class="button" href="action.php?action=epub_favorites_full"><?php echo Functions::truncate("Complet",30); ?></a>
+            </li>
+        </ul>
+    </section>
+    <?php
+}
+
+/* Mise à jour des options */
+function epub_plugin_update($_){
+	$configManager = new Configuration();
+	if($_['action']=='epub_plugin_update'){
+		$configManager->put('epub_version',$_['epub_version']);
+		$configManager->put('epub_menu',$_['epub_menu']==='on');
+		$configManager->put('epub_menu_unread',$_['epub_menu_unread']==='on');
+		$configManager->put('epub_menu_favorites',$_['epub_menu_favorites']==='on');
+		$_SESSION['configuration'] = null;
+
+		header('location: settings.php');
+	}
 }
 
 /* Création et envoi des fichiers Epub */
@@ -182,4 +254,10 @@ function create_epub($title, $qry_articles, $external_content){
 Plugin::addHook("menu_post_folder_menu", "epub_plugin_menu");
 // Ajout de la fonction epub_plugin_action à la page action de leed qui contient tous les traitements qui n'ont pas besoin d'affichage (ex :supprimer un flux, faire un appel ajax etc...)
 Plugin::addHook("action_post_case", "epub_plugin_action");
+// Ajout de la fonction epub_update pour mettre à jour les options
+Plugin::addHook("action_post_case", "epub_plugin_update");
+// Ajout du lien dans le menu "Gestion"
+Plugin::addHook("setting_post_link", "epub_plugin_managelink");
+// Page du menu "Gestion"
+Plugin::addHook("setting_post_section", "epub_plugin_settings");
 ?>
