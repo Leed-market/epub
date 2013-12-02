@@ -1,3 +1,37 @@
+Rev. 3.10 - 2013-12-01
+* Changes to TOC generation and references handling for improved results in specifically ePub 3
+* Fixed: Author was not correctly added to the book metadata.
+* Code clean up and comment documentation
+---------------------------------------------------------------------
+Rev. 3.00 - 2013-11-03
+---------------------------------------------------------------------
+* Added: ePub 3 support. The ePub 3 still contains the NCX for backwards combatability to ePub 2 readers, though there is no gurantee that it'll work on all readers.
+*  The EPub class constructor now takes arguments for epub version, EPub::BOOK_VERSION_EPUB2 or EPub::BOOK_VERSION_EPUB3
+*  The other new parameters on the EPub constructor are for default language and writing direction, used on the generated ePub 3 TOC.
+* Added: Ability to reference sub chapter id's
+*  ->addChapter($chapterName, $chapterLink); where the link must contain the #id.
+---------------------------------------------------------------------
+Rev. 2.53 - 2013-10-05
+* Added: Support for Chapter levels. 
+* Added functions:
+*  ->subLevel() to indent one level under the current, additional chapters are added under that.
+*  ->backLevel() to step one level back to the parent of the current level.
+*  ->rootLevel() to step back to the root of the navMap.
+*  ->getCurrentLevel() to get the current level indentation (root = 1).
+*  ->setCurrentLevel(int) to set the current level indentation (1 or less returns to the root, same as ->rootLevel()).
+* ->buildTOC now reflects this level indentation if present.
+* ePub250 is otherwise compatible to the previous version, and no modifications are needed if you don't need this feature.
+* Added: Support for custom meta data via the function ->addCustomMetadata($name, $content);
+*  It is the responsibility of the builder to ensure no invalid values are inserted.
+*  Example use is for for instance Calibre, see EPub.Example2.php for use.
+* Added: Support or user handled DublinCore meta data via the function ->addDublinCoreMetadata(DublinCore::constants, $content);
+---------------------------------------------------------------------
+Rev. 2.14/2.52 - 2013-10-05
+* Change: Using EPub::EXTERNAL_REF_REPLACE_IMAGES as externalReferences parameter when adding chapters containing image links, will now cause EPub to use the alt attribute of the image, if it exists.
+---------------------------------------------------------------------
+Rev. 2.13 - 2013-09-26
+* Fixed: sendBook and saveBook returned boolean TRUE/FALSE depending on if the sending was successful. The sanitized/used filename was never exposed. The methods now return the filename used for sending, or FALSE if it failed.
+* Change: sanitizeFileName is now a public function.
 ---------------------------------------------------------------------
 Rev. 2.12 - 2013-03-10
 * Fixed: Decoding of html entities if added to the book metadata. Requires added file EPub.HtmlEntities.php
