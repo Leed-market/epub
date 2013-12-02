@@ -16,14 +16,24 @@
  * */
 
 /** Includes **/
-include_once("./plugins/epub/PHPePub/EPub.250.php");
+include_once("./plugins/epub/PHPePub/EPub.php");
 
 /** Epub configuration **/
-define("EPUBBOOK_HEAD_START",
+define("EPUBBOOK_HEAD_START_v2",
 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
-. "<html>\n"
+. "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"\n"
+. "    \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n"
+. "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
 . "<head>\n"
 . "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n"
+//. "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles.css\" />\n" // TODO : add Leed css ?
+. "<title>");
+
+define("EPUBBOOK_HEAD_START_v3",
+"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+. "<html  xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:epub=\"http://www.idpf.org/2007/ops\">\n"
+. "<head>\n"
+. "<meta http-equiv=\"Default-Style\" content=\"text/html; charset=utf-8\" />\n"
 //. "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles.css\" />\n" // TODO : add Leed css ?
 . "<title>");
 
@@ -87,7 +97,11 @@ function epub_plugin_action($_,$myUser){
         $query = mysql_query($requete); // TODO PHP 5.5.0, remove this function to use mysqli_query or PDO
 
         if($query){
-            create_epub($epubfile_title, $query, strpos($_['action'],'full')!==false);
+            if(preg_match('/_([^_]*)$/', $_['action'], $extref)===1){
+                create_epub($epubfile_title." ".$extref[1], $query, $extref[1]);
+            }else{
+                echo "Action inconnue pour le plugin epub :".$_['action'];
+            }
         }else{
             echo mysql_error();
         }
@@ -96,17 +110,30 @@ function epub_plugin_action($_,$myUser){
 
 /* Utilise le contenu des articles pour créer un livre epub */
 function create_epub($title, $qry_articles, $external_content){
+	$configManager = new Configuration();
+	$configManager->getAll();
+
     $nbArticles = mysql_num_rows($qry_articles); // TODO PHP 5.5.0, remove this function to use mysqli_stmt_num_rows or PDO
-    
+
     if($nbArticles>0){
         // Epub initialisation
-        $book = new EPub();
-        $epubbook_start = constant("EPUBBOOK_HEAD_START").$title.constant("EPUBBOOK_HEAD_END");
-        
+        switch($configManager->get('epub_version')){
+            case 3:
+                $book = new EPub(EPub::BOOK_VERSION_EPUB3);
+                $epubbook_start = constant("EPUBBOOK_HEAD_START_v3").$title.constant("EPUBBOOK_HEAD_END");
+                break;
+
+            case 2:
+            default :
+                $book = new EPub(EPub::BOOK_VERSION_EPUB2);
+                $epubbook_start = constant("EPUBBOOK_HEAD_START_v2").$title.constant("EPUBBOOK_HEAD_END");
+                break;
+        }
+
         $book->setTitle($title);
         $book->setIdentifier("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."/".$title, EPub::IDENTIFIER_URI);
         $book->setLanguage("fr"); // TODO L10N
-        $book->setDescription("Auto generated epub file with artilces from Leed rss reader.");
+        $book->setDescription("Auto generated epub file with articles from Leed rss reader.");
         //$book->addCSSFile("styles.css", "css1", $cssData); //TODO add Leed css ?
         //$book->setCoverImage("Cover.jpg", file_get_contents("demo/cover-image.jpg"), "image/jpeg");
         
@@ -121,26 +148,33 @@ function create_epub($title, $qry_articles, $external_content){
                 . '<h3 class="articleDetails"> par '.$data['creator'].' le '.date("d/m/Y à H:i:s",$data['pubdate']).'</h3>'
                 . $data['content'].constant("EPUBBOOK_END");
             
-            if($external_content){
-                $book->addChapter($data['title'], "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_ADD);
-            }else{
+            switch($external_content){
+                case "textonly":
+                    // Replace img tags by their alt value if possible (PHPePub make it only for Epub::EXTERNAL_REF_REPLACE_IMAGES)
+                    $html_content = preg_replace('/<\s*?img.*alt="(.*?)".*?>/', '[image: ${1}]', $html_content);
+                    $book->addChapter($data['title'], "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_IGNORE);
+                    break;
 
-                // Replace img tags by their alt value if possible (a bug report has been done to add it directly in PHPePub)
-                $html_content = preg_replace('/<\s*?img.*alt="(.*?)".*?>/', '${1}', $html_content);
-                
-                $book->addChapter($data['title'], "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_IGNORE);
+                case "noimage":
+                    $book->addChapter($data['title'], "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_REPLACE_IMAGES);
+                    break;
+
+                case "full":
+                default:
+                    $book->addChapter($data['title'], "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_ADD);
+                    break;
             }
 
             $chapNb++;
         }
-        
+
         // Epub finalization
         $book->buildTOC();
         $book->finalize();
         $zipData = $book->sendBook(preg_replace("( )", '_', preg_replace("([^\w\s\d\,;\[\]\(\]])", '', $title)));
         exit;
     }else{
-        echo "Aucun articles à mettre dans le fichier epub.";
+        echo "Aucun articles à mettre dans le livre epub.";
     }
 }
 
