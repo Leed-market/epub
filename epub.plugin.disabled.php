@@ -219,25 +219,31 @@ function create_epub($title, $qry_articles, $external_content){
         // Epub chapters (articles) creation
         $chapNb = 1;
         while($data=mysql_fetch_array($qry_articles)){
+            $title_article = html_entity_decode($data['title'], ENT_QUOTES, 'UTF-8');
+            $author_article = html_entity_decode($data['creator'], ENT_QUOTES, 'UTF-8');
+            
             $html_content = $epubbook_start
-                . '<h2 class="articleTitle">'.$data['title'].'</h2>'
-                . '<h3 class="articleDetails"> par '.$data['creator'].' le '.date("d/m/Y à H:i:s",$data['pubdate']).'</h3>'
+                . '<h2 class="articleTitle">'.$title_article.'</h2>'
+                . '<h3 class="articleDetails"> par '.$author_article.' le '.date("d/m/Y à H:i:s",$data['pubdate']).'</h3>'
                 . $data['content'].constant("EPUBBOOK_END");
+
+            $html_content = html_entity_decode($html_content, ENT_QUOTES, 'UTF-8');
             
             switch($external_content){
                 case "textonly":
                     // Replace img tags by their alt value if possible (PHPePub make it only for Epub::EXTERNAL_REF_REPLACE_IMAGES)
                     $html_content = preg_replace('/<\s*?img.*alt="(.*?)".*?>/', '[image: ${1}]', $html_content);
-                    $book->addChapter($data['title'], "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_IGNORE);
+                    $html_content = preg_replace('/<\s*?br.*(.*?)".*?>/', '[image: ${1}]', $html_content);
+                    $book->addChapter($title_article, "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_IGNORE);
                     break;
 
                 case "noimage":
-                    $book->addChapter($data['title'], "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_REPLACE_IMAGES);
+                    $book->addChapter($title_article, "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_REPLACE_IMAGES);
                     break;
 
                 case "full":
                 default:
-                    $book->addChapter($data['title'], "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_ADD);
+                    $book->addChapter($title_article, "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_ADD);
                     break;
             }
 
