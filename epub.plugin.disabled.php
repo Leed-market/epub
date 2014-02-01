@@ -134,7 +134,10 @@ function epub_plugin_settings(&$myUser){
 }
 
 /* Mise à jour des options */
-function epub_plugin_update($_){
+function epub_plugin_update_settings(&$_){
+    $myUser = (isset($_SESSION['currentUser'])?unserialize($_SESSION['currentUser']):false);
+    if($myUser===false) exit('Vous devez vous connecter pour mettre à jour les options du plugin Epub.');
+
 	$configManager = new Configuration();
 	if($_['action']=='epub_plugin_update'){
 		$configManager->put('epub_version',$_['epub_version']);
@@ -149,11 +152,11 @@ function epub_plugin_update($_){
 
 /* Création et envoi des fichiers Epub */
 // TODO L10N
-function epub_plugin_action($_,$myUser){
-    if($myUser==false){
-        exit('Vous devez vous connecter pour cette action.');
-    }
-    elseif(strpos($_['action'],'epub_unread')!==false || strpos($_['action'],'epub_favorites')!==false){
+function epub_plugin_download(&$_){
+    $myUser = (isset($_SESSION['currentUser'])?unserialize($_SESSION['currentUser']):false);
+    if($myUser===false) exit('Vous devez vous connecter pour télécharger les fichiers Epub.');
+
+    if(strpos($_['action'],'epub_unread')!==false || strpos($_['action'],'epub_favorites')!==false){
         $requete = 'SELECT title,creator,content,pubdate
                     FROM '.MYSQL_PREFIX.'event
                     WHERE ';
@@ -260,14 +263,17 @@ function create_epub($title, $qry_articles, $external_content){
     }
 }
 
-// Ajout de la fonction epub_plugin_displayEvents au Hook situé après le menu des flux
-Plugin::addHook("menu_post_folder_menu", "epub_plugin_menu");
-// Ajout de la fonction epub_plugin_action à la page action de leed qui contient tous les traitements qui n'ont pas besoin d'affichage (ex :supprimer un flux, faire un appel ajax etc...)
-Plugin::addHook("action_post_case", "epub_plugin_action");
-// Ajout de la fonction epub_update pour mettre à jour les options
-Plugin::addHook("action_post_case", "epub_plugin_update");
-// Ajout du lien dans le menu "Gestion"
-Plugin::addHook("setting_post_link", "epub_plugin_managelink");
-// Page du menu "Gestion"
-Plugin::addHook("setting_post_section", "epub_plugin_settings");
+$myUser = (isset($_SESSION['currentUser'])?unserialize($_SESSION['currentUser']):false);
+if($myUser!==false){
+    // Ajout de la fonction epub_plugin_displayEvents au Hook situé après le menu des flux
+    Plugin::addHook("menu_post_folder_menu", "epub_plugin_menu");
+    // Ajout de la fonction epub_plugin_action à la page action de leed qui contient tous les traitements qui n'ont pas besoin d'affichage (ex :supprimer un flux, faire un appel ajax etc...)
+    Plugin::addHook("action_post_case", "epub_plugin_download");
+    // Ajout de la fonction epub_update pour mettre à jour les options
+    Plugin::addHook("action_post_case", "epub_plugin_update_settings");
+    // Ajout du lien dans le menu "Gestion"
+    Plugin::addHook("setting_post_link", "epub_plugin_managelink");
+    // Page du menu "Gestion"
+    Plugin::addHook("setting_post_section", "epub_plugin_settings");
+}
 ?>
