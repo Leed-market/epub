@@ -48,7 +48,7 @@ define("EPUBBOOK_END",
 
 /* Menu pour télécharger les fichiers Epub en page d'accueil */
 // TODO L10N
-function epub_plugin_menu(&$myUser){
+function epub_plugin_menu(){
     $configManager = new Configuration();
     $configManager->getAll();
 
@@ -77,12 +77,12 @@ function epub_plugin_menu(&$myUser){
 }
 
 /* Ajout du lien pour les configurations dans le menu "Gestion" */
-function epub_plugin_managelink(&$myUser){
+function epub_plugin_managelink(){
     echo '<li><a class="toggle" href="#epub">Plugin Epub</a></li>';
 }
 
 /* Préférences du plugin */
-function epub_plugin_settings(&$myUser){
+function epub_plugin_settings(){
     $configManager = new Configuration();
     $configManager->getAll();
     ?>
