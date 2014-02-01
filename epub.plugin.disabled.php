@@ -5,7 +5,7 @@
 @link https://redmine.adorsaz.ch/projects/leed-market_
 @link git://adorsaz.ch/leed-market.git
 @licence LGPLv3
-@version 1.1.0
+@version 1.1.1
 @description Ce plugin permet de télécharger vos articles au format epub pour une lecture hors-ligne.
 */
 
