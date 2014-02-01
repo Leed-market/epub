@@ -143,7 +143,7 @@ function epub_plugin_update($_){
 		$configManager->put('epub_menu_favorites',$_['epub_menu_favorites']==='on');
 		$_SESSION['configuration'] = null;
 
-		header('location: settings.php');
+		header('location: settings.php#epub');
 	}
 }
 
