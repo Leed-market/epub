@@ -49,8 +49,8 @@ define("EPUBBOOK_END",
 /* Menu pour télécharger les fichiers Epub en page d'accueil */
 // TODO L10N
 function epub_plugin_menu(&$myUser){
-	$configManager = new Configuration();
-	$configManager->getAll();
+    $configManager = new Configuration();
+    $configManager->getAll();
 
     if($configManager->get('epub_menu')){
         echo '<aside class="epubMenu clear">
@@ -83,9 +83,10 @@ function epub_plugin_managelink(&$myUser){
 
 /* Préférences du plugin */
 function epub_plugin_settings(&$myUser){
-	$configManager = new Configuration();
-	$configManager->getAll();
+    $configManager = new Configuration();
+    $configManager->getAll();
     ?>
+
     <section id="epub" name="epub" class="epub">
         <form action="action.php?action=epub_plugin_update" method="POST" style="width:80%;">
             <h2>Préférences du plugin Epub</h2>
@@ -135,19 +136,19 @@ function epub_plugin_settings(&$myUser){
 
 /* Mise à jour des options */
 function epub_plugin_update_settings(&$_){
-    $myUser = (isset($_SESSION['currentUser'])?unserialize($_SESSION['currentUser']):false);
-    if($myUser===false) exit('Vous devez vous connecter pour mettre à jour les options du plugin Epub.');
+   $myUser = (isset($_SESSION['currentUser'])?unserialize($_SESSION['currentUser']):false);
+   if($myUser===false) exit('Vous devez vous connecter pour mettre à jour les options du plugin Epub.');
 
-	$configManager = new Configuration();
-	if($_['action']=='epub_plugin_update'){
-		$configManager->put('epub_version',$_['epub_version']);
-		$configManager->put('epub_menu',$_['epub_menu']==='on');
-		$configManager->put('epub_menu_unread',$_['epub_menu_unread']==='on');
-		$configManager->put('epub_menu_favorites',$_['epub_menu_favorites']==='on');
-		$_SESSION['configuration'] = null;
-
-		header('location: settings.php#epub');
-	}
+   $configManager = new Configuration();
+   if($_['action']=='epub_plugin_update'){
+       $configManager->put('epub_version',$_['epub_version']);
+       $configManager->put('epub_menu',$_['epub_menu']==='on');
+       $configManager->put('epub_menu_unread',$_['epub_menu_unread']==='on');
+       $configManager->put('epub_menu_favorites',$_['epub_menu_favorites']==='on');
+       $_SESSION['configuration'] = null;
+       
+       header('location: settings.php#epub');
+   }
 }
 
 /* Création et envoi des fichiers Epub */
@@ -189,8 +190,8 @@ function epub_plugin_download(&$_){
 
 /* Utilise le contenu des articles pour créer un livre epub */
 function create_epub($title, $qry_articles, $external_content){
-	$configManager = new Configuration();
-	$configManager->getAll();
+    $configManager = new Configuration();
+    $configManager->getAll();
 
     $nbArticles = mysql_num_rows($qry_articles); // TODO PHP 5.5.0, remove this function to use mysqli_stmt_num_rows or PDO
 
