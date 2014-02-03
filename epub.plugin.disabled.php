@@ -5,7 +5,7 @@
 @link https://redmine.adorsaz.ch/projects/leed-market_
 @link git://adorsaz.ch/leed-market.git
 @licence LGPLv3
-@version 1.1.1
+@version 1.1.2
 @description Ce plugin permet de télécharger vos articles au format epub pour une lecture hors-ligne.
 */
 
@@ -140,11 +140,12 @@ function epub_plugin_update_settings(&$_){
    if($myUser===false) exit('Vous devez vous connecter pour mettre à jour les options du plugin Epub.');
 
    $configManager = new Configuration();
+   $configManager->getAll();
    if($_['action']=='epub_plugin_update'){
        $configManager->put('epub_version',$_['epub_version']);
-       $configManager->put('epub_menu',$_['epub_menu']==='on');
-       $configManager->put('epub_menu_unread',$_['epub_menu_unread']==='on');
-       $configManager->put('epub_menu_favorites',$_['epub_menu_favorites']==='on');
+       $configManager->put('epub_menu',(isset($_['epub_menu'])?(($_['epub_menu']==='on')?1:0):0));
+       $configManager->put('epub_menu_unread',(isset($_['epub_menu_unread'])?(($_['epub_menu_unread']==='on')?1:0):0));
+       $configManager->put('epub_menu_favorites',(isset($_['epub_menu_favorites'])?(($_['epub_menu_favorites']==='on')?1:0):0));
        $_SESSION['configuration'] = null;
        
        header('location: settings.php#epub');
