@@ -5,7 +5,7 @@
 @link https://redmine.adorsaz.ch/projects/leed-market_
 @link git://adorsaz.ch/leed-market.git
 @licence LGPLv3
-@version 1.1.2
+@version 1.1.3
 @description Ce plugin permet de télécharger vos articles au format epub pour une lecture hors-ligne.
 */
 
@@ -136,12 +136,13 @@ function epub_plugin_settings(){
 
 /* Mise à jour des options */
 function epub_plugin_update_settings(&$_){
-   $myUser = (isset($_SESSION['currentUser'])?unserialize($_SESSION['currentUser']):false);
-   if($myUser===false) exit('Vous devez vous connecter pour mettre à jour les options du plugin Epub.');
-
-   $configManager = new Configuration();
-   $configManager->getAll();
    if($_['action']=='epub_plugin_update'){
+       $myUser = (isset($_SESSION['currentUser'])?unserialize($_SESSION['currentUser']):false);
+       if($myUser===false) exit('Vous devez vous connecter pour mettre à jour les options du plugin Epub.');
+
+       $configManager = new Configuration();
+       $configManager->getAll();
+
        $configManager->put('epub_version',$_['epub_version']);
        $configManager->put('epub_menu',(isset($_['epub_menu'])?(($_['epub_menu']==='on')?1:0):0));
        $configManager->put('epub_menu_unread',(isset($_['epub_menu_unread'])?(($_['epub_menu_unread']==='on')?1:0):0));
@@ -155,10 +156,11 @@ function epub_plugin_update_settings(&$_){
 /* Création et envoi des fichiers Epub */
 // TODO L10N
 function epub_plugin_download(&$_){
-    $myUser = (isset($_SESSION['currentUser'])?unserialize($_SESSION['currentUser']):false);
-    if($myUser===false) exit('Vous devez vous connecter pour télécharger les fichiers Epub.');
 
     if(strpos($_['action'],'epub_unread')!==false || strpos($_['action'],'epub_favorites')!==false){
+        $myUser = (isset($_SESSION['currentUser'])?unserialize($_SESSION['currentUser']):false);
+        if($myUser===false) exit('Vous devez vous connecter pour télécharger les fichiers Epub.');
+
         $requete = 'SELECT title,creator,content,pubdate
                     FROM '.MYSQL_PREFIX.'event
                     WHERE ';
