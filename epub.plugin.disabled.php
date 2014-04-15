@@ -162,7 +162,7 @@ function epub_plugin_download(&$_){
         if($myUser===false) exit('Vous devez vous connecter pour télécharger les fichiers Epub.');
 
         $requete = 'SELECT title,creator,content,pubdate
-                    FROM '.MYSQL_PREFIX.'event
+                    FROM `'.MYSQL_PREFIX.'event`
                     WHERE ';
 
         $epubfile_title = "Title to be defined";
