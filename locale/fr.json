@@ -21,5 +21,7 @@
  "P_EPUB_SET_VERSION":"Version EPUB à utiliser pour créer les fichiers :",
  "P_EPUB_TEXTONLY":"Texte seulement",
  "P_EPUB_UNKNOWN_ACTION_ERROR":"Action inconnue pour le plugin epub :",
- "P_EPUB_UNREAD_ARTICLES":"Articles Leed non lus"
+ "P_EPUB_UNREAD_ARTICLES":"Articles Leed non lus",
+ "P_EPUB_DESCRIPTION":"Ebook automatiquement généré par votre lecteur de flux RSS Leed.",
+ "P_EPUB_BY":"par"
 }

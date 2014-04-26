@@ -215,7 +215,7 @@ function create_epub($title, $qry_articles, $external_content){
         $book->setTitle($title);
         $book->setIdentifier("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."/".$title, EPub::IDENTIFIER_URI);
         $book->setLanguage("fr"); // TODO L10N
-        $book->setDescription("Auto generated epub file with articles from Leed rss reader.");
+        $book->setDescription(_t('P_EPUB_BOOK_DESCRIPTION'));
         //$book->addCSSFile("styles.css", "css1", $cssData); //TODO add Leed css ?
         //$book->setCoverImage("Cover.jpg", file_get_contents("demo/cover-image.jpg"), "image/jpeg");
         
@@ -230,7 +230,7 @@ function create_epub($title, $qry_articles, $external_content){
             
             $html_content = $epubbook_start
                 . '<h2 class="articleTitle">'.$title_article.'</h2>'
-                . '<h3 class="articleDetails"> par '.$author_article.' '._t('P_EPUB_ON_DATE').' '.date("d/m/Y", $data['pubdate']).' '._t('P_EPUB_AT_TIME').' ' .date("H:i:s",$data['pubdate']).'</h3>'
+                . '<h3 class="articleDetails">'._t('P_EPUB_BY').' '.$author_article.' '._t('P_EPUB_ON_DATE').' '.date("d/m/Y", $data['pubdate']).' '._t('P_EPUB_AT_TIME').' ' .date("H:i:s",$data['pubdate']).'</h3>'
                 . $data['content'].constant("EPUBBOOK_END");
 
             $html_content = html_entity_decode($html_content, ENT_QUOTES, 'UTF-8');
