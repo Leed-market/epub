@@ -11,7 +11,7 @@
 
 /**
  * List of TODOs :
- *  - TODO L10N : marks TODO when localisation on Leed is done.
+ *  - TODO L10N : add right language in META of EPUB
  *  - TODO PHP 5.5.0 : marks TODO when php functions will be depreciated
  * */
 
@@ -47,7 +47,6 @@ define("EPUBBOOK_END",
 ."</html>\n");
 
 /* Menu pour télécharger les fichiers Epub en page d'accueil */
-// TODO L10N
 function epub_plugin_menu(){
     $configManager = new Configuration();
     $configManager->getAll();
@@ -57,17 +56,17 @@ function epub_plugin_menu(){
                 <h3 class="left">Epubs</h3>
                     <ul style="font-size:0.8em;">';
                     if($configManager->get('epub_menu_unread')){
-                            echo '<li class="clear">Télécharger les articles non-lus :<br/>
-                                    <a class="button" href="action.php?action=epub_unread_textonly">'.Functions::truncate("Texte seulement",30).'</a>
-                                    <a class="button" href="action.php?action=epub_unread_noimage">'.Functions::truncate("Sans images",30).'</a>
-                                    <a class="button" href="action.php?action=epub_unread_full">'.Functions::truncate("Complet",30).'</a>
+                            echo '<li class="clear">'._t('P_EPUB_DOWNLOAD_UNREAD').'<br/>
+                                    <a class="button" href="action.php?action=epub_unread_textonly">'._t('P_EPUB_TEXTONLY').'</a>
+                                    <a class="button" href="action.php?action=epub_unread_noimage">'._t('P_EPUB_NOIMAGES').'</a>
+                                    <a class="button" href="action.php?action=epub_unread_full">'._t('P_EPUB_FULL').'</a>
                                     </li>';
                     }
                     if($configManager->get('epub_menu_favorites')){
-                            echo '<li class="clear">Télécharger les articles favoris :<br/>
-                                    <a class="button" href="action.php?action=epub_favorites_textonly">'.Functions::truncate("Texte seulement",30).'</a>
-                                    <a class="button" href="action.php?action=epub_favorites_noimage">'.Functions::truncate("Sans images",30).'</a>
-                                    <a class="button" href="action.php?action=epub_favorites_full">'.Functions::truncate("Complet",30).'</a>
+                            echo '<li class="clear">'._t('P_EPUB_DOWNLOAD_FAVORITES').'<br/>
+                                    <a class="button" href="action.php?action=epub_favorites_textonly">'._t('P_EPUB_TEXTONLY').'</a>
+                                    <a class="button" href="action.php?action=epub_favorites_noimage">'._t('P_EPUB_NOIMAGES').'</a>
+                                    <a class="button" href="action.php?action=epub_favorites_full">'._t('P_EPUB_FULL').'</a>
                                     </li>';
                     }
                     echo '</ul>
@@ -78,7 +77,7 @@ function epub_plugin_menu(){
 
 /* Ajout du lien pour les configurations dans le menu "Gestion" */
 function epub_plugin_managelink(){
-    echo '<li><a class="toggle" href="#epub">Plugin Epub</a></li>';
+    echo '<li><a class="toggle" href="#epub">'._t('P_EPUB_MANAGE_TITLE').'</a></li>';
 }
 
 /* Préférences du plugin */
@@ -89,45 +88,45 @@ function epub_plugin_settings(){
 
     <section id="epub" name="epub" class="epub">
         <form action="action.php?action=epub_plugin_update" method="POST" style="width:80%;">
-            <h2>Préférences du plugin Epub</h2>
+            <h2><?php echo _t('P_EPUB_SETTINGS'); ?></h2>
             <ul>
                 <li>
-                    <label for="epub_version">Version Epub à utiliser pour créer les livres :</label>
+                    <label for="epub_version"><?php echo _t('P_EPUB_SET_VERSION'); ?></label>
                     <select id="epub_version" name="epub_version">
                         <option value="2" <?php if($configManager->get('epub_version')==='2') echo 'selected';?>>2</option>
                         <option value="3" <?php if($configManager->get('epub_version')==='3') echo 'selected';?>>3</option>
                     </select>
                 </li>
                 <li>
-                    <label for="epub_menu">Afficher un menu sur la droite de la page d'accueil :</label>
+                    <label for="epub_menu"><?php echo _t('P_EPUB_SET_HOME_MENU'); ?></label>
                     <input type="checkbox" id="epub_menu" name="epub_menu" <?php if($configManager->get('epub_menu')) echo 'checked';?>/>
                     <ul style="margin:0;">
                         <li>
-                            <label for="epub_menu_unread" >Afficher les lien pour les articles non-lus :</label>
+                            <label for="epub_menu_unread" ><?php echo _t('P_EPUB_SET_UNREAD_LINK'); ?></label>
                             <input type="checkbox" id="epub_menu_unread" name="epub_menu_unread" <?php if($configManager->get('epub_menu_unread')) echo 'checked';?>/>
                         </li>
                         <li>
-                            <label for="epub_menu_favorites" >Afficher les lien pour les articles favoris :</label>
+                            <label for="epub_menu_favorites" ><?php echo _t('P_EPUB_SET_FAVORITE_LINK'); ?></label>
                             <input type="checkbox" id="epub_menu_favorites" name="epub_menu_favorites" <?php if($configManager->get('epub_menu_favorites')) echo 'checked';?>/>
                         </li>
                     </ul>
                 </li>
             </ul>
             <p style="text-align:right;">
-                <input type="submit" class="button" value="Enregistrer"><br/>
+                <input type="submit" class="button" value="<?php echo _t('P_EPUB_SAVE_SETTINGS'); ?>"><br/>
             </p>
         </form>
-        <h2>Téléchargement des livres Epub</h2>
+        <h2><?php echo _t('P_EPUB_DOWNLOAD_TITLE'); ?></h2>
         <ul>
-            <li>Télécharger les articles non-lus :
-                    <a class="button" href="action.php?action=epub_unread_textonly"><?php echo Functions::truncate("Texte seulement",30); ?></a>
-                    <a class="button" href="action.php?action=epub_unread_noimage"><?php echo Functions::truncate("Sans images",30); ?></a>
-                    <a class="button" href="action.php?action=epub_unread_full"><?php echo Functions::truncate("Complet",30); ?></a>
+            <li><?php echo  _t('P_EPUB_DOWNLOAD_UNREAD'); ?>
+                    <a class="button" href="action.php?action=epub_unread_textonly"><?php echo _t('P_EPUB_TEXTONLY'); ?></a>
+                    <a class="button" href="action.php?action=epub_unread_noimage"><?php echo _t('P_EPUB_NOIMAGES'); ?></a>
+                    <a class="button" href="action.php?action=epub_unread_full"><?php echo _t('P_EPUB_FULL'); ?></a>
             </li>
-            <li>Télécharger les articles favoris :
-                    <a class="button" href="action.php?action=epub_favorites_textonly"><?php echo Functions::truncate("Texte seulement",30); ?></a>
-                    <a class="button" href="action.php?action=epub_favorites_noimage"><?php echo Functions::truncate("Sans images",30); ?></a>
-                    <a class="button" href="action.php?action=epub_favorites_full"><?php echo Functions::truncate("Complet",30); ?></a>
+            <li><?php echo  _t('P_EPUB_DOWNLOAD_FAVORITES'); ?>
+                    <a class="button" href="action.php?action=epub_favorites_textonly"><?php echo _t('P_EPUB_TEXTONLY'); ?></a>
+                    <a class="button" href="action.php?action=epub_favorites_noimage"><?php echo _t('P_EPUB_NOIMAGES'); ?></a>
+                    <a class="button" href="action.php?action=epub_favorites_full"><?php echo _t('P_EPUB_FULL'); ?></a>
             </li>
         </ul>
     </section>
@@ -138,7 +137,7 @@ function epub_plugin_settings(){
 function epub_plugin_update_settings(&$_){
    if($_['action']=='epub_plugin_update'){
        $myUser = (isset($_SESSION['currentUser'])?unserialize($_SESSION['currentUser']):false);
-       if($myUser===false) exit('Vous devez vous connecter pour mettre à jour les options du plugin Epub.');
+       if($myUser===false) exit(_t('P_EPUB_NOTLOGGED_ERROR_MODIFY_SETTINGS'));
 
        $configManager = new Configuration();
        $configManager->getAll();
@@ -154,12 +153,11 @@ function epub_plugin_update_settings(&$_){
 }
 
 /* Création et envoi des fichiers Epub */
-// TODO L10N
 function epub_plugin_download(&$_){
 
     if(strpos($_['action'],'epub_unread')!==false || strpos($_['action'],'epub_favorites')!==false){
         $myUser = (isset($_SESSION['currentUser'])?unserialize($_SESSION['currentUser']):false);
-        if($myUser===false) exit('Vous devez vous connecter pour télécharger les fichiers Epub.');
+        if($myUser===false) exit(_t('P_EPUB_NOTLOGGED_ERROR_DOWNLOAD'));
 
         $requete = 'SELECT title,creator,content,pubdate
                     FROM '.MYSQL_PREFIX.'event
@@ -169,11 +167,12 @@ function epub_plugin_download(&$_){
 
         if(strpos($_['action'],'epub_unread')!==false){
             $requete .= 'unread=1 ';
-            $epubfile_title = 'Articles Leed Non lu - le '.date('d/m/y').' à '.date('H:i');
+            $epubfile_title = _t('P_EPUB_UNREAD_ARTICLES');
         }elseif(strpos($_['action'],'epub_favorites')!==false){
             $requete .= 'favorite=1 ';
-            $epubfile_title = 'Articles Leed Favoris - le '.date('d/m/y').' à '.date('H:i');
+            $epubfile_title = _t('P_EPUB_FAVOITE_ARTICLES');
         }
+        $epubfile_title .= ' - '._t('P_EPUB_ON_DATE').' '.date('d/m/y').' '._t('P_EPUB_AT_TIME').' '.date('H:i');
         
         $requete .= 'ORDER BY pubdate DESC';
         
@@ -183,7 +182,7 @@ function epub_plugin_download(&$_){
             if(preg_match('/_([^_]*)$/', $_['action'], $extref)===1){
                 create_epub($epubfile_title." ".$extref[1], $query, $extref[1]);
             }else{
-                echo "Action inconnue pour le plugin epub :".$_['action'];
+                echo _t('P_EPUB_UNKNOWN_ACTION_ERROR').' '.$_['action'];
             }
         }else{
             echo mysql_error();
@@ -220,7 +219,7 @@ function create_epub($title, $qry_articles, $external_content){
         //$book->addCSSFile("styles.css", "css1", $cssData); //TODO add Leed css ?
         //$book->setCoverImage("Cover.jpg", file_get_contents("demo/cover-image.jpg"), "image/jpeg");
         
-        $cover = $epubbook_start. "<h1>".$title."</h1>\n<h2>By your Leed rss reader</h2>\n" . constant("EPUBBOOK_END");
+        $cover = $epubbook_start. "<h1>".$title."</h1>\n<h2>"._t('P_EPUB_BYLEED')."</h2>\n" . constant("EPUBBOOK_END");
         $book->addChapter("Notices", "Cover.html", $cover);
         
         // Epub chapters (articles) creation
@@ -231,7 +230,7 @@ function create_epub($title, $qry_articles, $external_content){
             
             $html_content = $epubbook_start
                 . '<h2 class="articleTitle">'.$title_article.'</h2>'
-                . '<h3 class="articleDetails"> par '.$author_article.' le '.date("d/m/Y à H:i:s",$data['pubdate']).'</h3>'
+                . '<h3 class="articleDetails"> par '.$author_article.' '._t('P_EPUB_ON_DATE').' '.date("d/m/Y", $data['pubdate']).' '._t('P_EPUB_AT_TIME').' ' .date("H:i:s",$data['pubdate']).'</h3>'
                 . $data['content'].constant("EPUBBOOK_END");
 
             $html_content = html_entity_decode($html_content, ENT_QUOTES, 'UTF-8');
@@ -241,16 +240,16 @@ function create_epub($title, $qry_articles, $external_content){
                     // Replace img tags by their alt value if possible (PHPePub make it only for Epub::EXTERNAL_REF_REPLACE_IMAGES)
                     $html_content = preg_replace('/<\s*?img.*alt="(.*?)".*?>/', '[image: ${1}]', $html_content);
                     $html_content = preg_replace('/<\s*?br.*(.*?)".*?>/', '[image: ${1}]', $html_content);
-                    $book->addChapter($title_article, "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_IGNORE);
+                    $book->addChapter($title_article, _t('P_EPUB_CHAPTER')."_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_IGNORE);
                     break;
 
                 case "noimage":
-                    $book->addChapter($title_article, "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_REPLACE_IMAGES);
+                    $book->addChapter($title_article, _t('P_EPUB_CHAPTER')."_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_REPLACE_IMAGES);
                     break;
 
                 case "full":
                 default:
-                    $book->addChapter($title_article, "Chapitre_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_ADD);
+                    $book->addChapter($title_article, _t('P_EPUB_CHAPTER')."_".$chapNb.".html", $html_content, true, EPub::EXTERNAL_REF_ADD);
                     break;
             }
 
@@ -263,7 +262,7 @@ function create_epub($title, $qry_articles, $external_content){
         $zipData = $book->sendBook(preg_replace("( )", '_', preg_replace("([^\w\s\d\,;\[\]\(\]])", '', $title)));
         exit;
     }else{
-        echo "Aucun articles à mettre dans le livre epub.";
+        echo _t('P_EPUB_NOARTICLES_WARNING');
     }
 }
 
