@@ -22,6 +22,6 @@
  "P_EPUB_TEXTONLY":"Text only",
  "P_EPUB_UNKNOWN_ACTION_ERROR":"Unknown action for epub plugin:",
  "P_EPUB_UNREAD_ARTICLES":"Unread Leed articles",
- "P_EPUB_DESCRIPTION":"Automatically generated ebook by your Leed rss reader.",
+ "P_EPUB_BOOK_DESCRIPTION":"Automatically generated ebook by your Leed rss reader.",
  "P_EPUB_BY":"by"
 }
