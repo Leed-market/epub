@@ -160,7 +160,7 @@ function epub_plugin_download(&$_){
         if($myUser===false) exit(_t('P_EPUB_NOTLOGGED_ERROR_DOWNLOAD'));
 
         $requete = 'SELECT title,creator,content,pubdate
-                    FROM '.MYSQL_PREFIX.'event
+                    FROM `'.MYSQL_PREFIX.'event`
                     WHERE ';
 
         $epubfile_title = "Title to be defined";
