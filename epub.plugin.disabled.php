@@ -158,6 +158,8 @@ function epub_plugin_download(&$_){
     if(strpos($_['action'],'epub_unread')!==false || strpos($_['action'],'epub_favorites')!==false){
         $myUser = (isset($_SESSION['currentUser'])?unserialize($_SESSION['currentUser']):false);
         if($myUser===false) exit(_t('P_EPUB_NOTLOGGED_ERROR_DOWNLOAD'));
+	
+		$mysqli = new MysqlEntity();
 
         $requete = 'SELECT title,creator,content,pubdate
                     FROM `'.MYSQL_PREFIX.'event`
@@ -176,7 +178,7 @@ function epub_plugin_download(&$_){
         
         $requete .= 'ORDER BY pubdate DESC';
         
-        $query = mysql_query($requete); // TODO PHP 5.5.0, remove this function to use mysqli_query or PDO
+        $query = $mysqli->customQuery($requete);
 
         if($query){
             if(preg_match('/_([^_]*)$/', $_['action'], $extref)===1){
@@ -185,17 +187,24 @@ function epub_plugin_download(&$_){
                 echo _t('P_EPUB_UNKNOWN_ACTION_ERROR').' '.$_['action'];
             }
         }else{
-            echo mysql_error();
+            echo mysqli->error;
         }
     }
 }
 
 /* Utilise le contenu des articles pour créer un livre epub */
 function create_epub($title, $qry_articles, $external_content){
+	$mysqli = new MysqlEntity();
     $configManager = new Configuration();
     $configManager->getAll();
 
-    $nbArticles = mysql_num_rows($qry_articles); // TODO PHP 5.5.0, remove this function to use mysqli_stmt_num_rows or PDO
+	$nbArticles = 0;
+	if ($stmt = $mysqli->prepare($qry_articles)) {
+		$stmt->execute(); //TODO manage errors
+		$stmt->store_result();
+		$nbArticles = $stmt->num_rows;
+		$stmt->close();
+	}
 
     if($nbArticles>0){
         // Epub initialisation
