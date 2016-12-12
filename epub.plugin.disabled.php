@@ -158,8 +158,8 @@ function epub_plugin_download(&$_){
     if(strpos($_['action'],'epub_unread')!==false || strpos($_['action'],'epub_favorites')!==false){
         $myUser = (isset($_SESSION['currentUser'])?unserialize($_SESSION['currentUser']):false);
         if($myUser===false) exit(_t('P_EPUB_NOTLOGGED_ERROR_DOWNLOAD'));
-	
-		$mysqli = new MysqlEntity();
+
+        $mysqli = new MysqlEntity();
 
         $requete = 'SELECT title,creator,content,pubdate
                     FROM `'.MYSQL_PREFIX.'event`
@@ -187,24 +187,18 @@ function epub_plugin_download(&$_){
                 echo _t('P_EPUB_UNKNOWN_ACTION_ERROR').' '.$_['action'];
             }
         }else{
-            echo mysqli->error;
+            echo $mysqli->error;
         }
     }
 }
 
 /* Utilise le contenu des articles pour créer un livre epub */
 function create_epub($title, $qry_articles, $external_content){
-	$mysqli = new MysqlEntity();
+    $mysqli = MysqlConnector::getInstance()->connection;
     $configManager = new Configuration();
     $configManager->getAll();
 
-	$nbArticles = 0;
-	if ($stmt = $mysqli->prepare($qry_articles)) {
-		$stmt->execute(); //TODO manage errors
-		$stmt->store_result();
-		$nbArticles = $stmt->num_rows;
-		$stmt->close();
-	}
+    $nbArticles = $qry_articles->num_rows;
 
     if($nbArticles>0){
         // Epub initialisation
@@ -233,7 +227,7 @@ function create_epub($title, $qry_articles, $external_content){
         
         // Epub chapters (articles) creation
         $chapNb = 1;
-        while($data=mysql_fetch_array($qry_articles)){
+        while($data = $qry_articles->fetch_array()){
             $title_article = html_entity_decode($data['title'], ENT_QUOTES, 'UTF-8');
             $author_article = html_entity_decode($data['creator'], ENT_QUOTES, 'UTF-8');
             
