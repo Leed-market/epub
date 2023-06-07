@@ -12,7 +12,7 @@
  * @version 3.20
  */
 class EPubChapterSplitter {
-    const VERSION = 3.20;
+    public const VERSION = 3.20;
 
     private $splitDefaultSize = 250000;
     private $bookVersion = EPub::BOOK_VERSION_EPUB2;
@@ -63,14 +63,14 @@ class EPubChapterSplitter {
      * @return array with 1 or more parts
      */
     function splitChapter($chapter, $splitOnSearchString = false, $searchString = '/^Chapter\\ /i') {
-        $chapterData = array();
+        $chapterData = [];
         $isSearchRegexp = $splitOnSearchString && (preg_match('#^(\D|\S|\W).+\1[imsxeADSUXJu]*$#m', $searchString) == 1);
         if ($splitOnSearchString && !$isSearchRegexp) {
             $searchString = '#^<.+?>' . preg_quote($searchString, '#') . "#";
         }
 
         if (!$splitOnSearchString && strlen($chapter) <= $this->splitDefaultSize) {
-            return array($chapter);
+            return [$chapter];
         }
 
         $xmlDoc = new DOMDocument();
@@ -87,11 +87,11 @@ class EPubChapterSplitter {
         }
         $headerLength = strlen($newXML);
 
-        $files = array();
-        $chapterNames = array();
+        $files = [];
+        $chapterNames = [];
         $domDepth = 0;
-        $domPath = array();
-        $domClonedPath = array();
+        $domPath = [];
+        $domClonedPath = [];
 
         $curFile = $xmlDoc->createDocumentFragment();
         $files[] = $curFile;
@@ -140,13 +140,21 @@ class EPubChapterSplitter {
                     if ($domDepth > 0) {
                         reset($domPath);
                         reset($domClonedPath);
-                        $oneDomClonedPath = each($domClonedPath);
+                        $oneDomClonedPath[1] = current($domClonedPath);
+                        $oneDomClonedPath['value'] = current($domClonedPath);
+                        $oneDomClonedPath[0] = key($domClonedPath);
+                        $oneDomClonedPath['key'] = key($domClonedPath);
+                        next($domClonedPath);
                         while ($oneDomClonedPath) {
-                            list($k, $v) = $oneDomClonedPath;
+                            [$k, $v] = $oneDomClonedPath;
                             $newParent = $v->cloneNode(false);
                             $curParent->appendChild($newParent);
                             $curParent = $newParent;
-                            $oneDomClonedPath = each($domClonedPath);
+                            $oneDomClonedPath[1] = current($domClonedPath);
+                            $oneDomClonedPath['value'] = current($domClonedPath);
+                            $oneDomClonedPath[0] = key($domClonedPath);
+                            $oneDomClonedPath['key'] = key($domClonedPath);
+                            next($domClonedPath);
                         }
                     }
                     $curSize = strlen($xmlDoc->saveXML($curFile));

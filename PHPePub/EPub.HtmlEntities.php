@@ -8,7 +8,7 @@
  * @version 3.00
  */
 global $htmlEntities;
-$htmlEntities = array();
+$htmlEntities = [];
 
 $htmlEntities["&quot;"]     ="\x22"; // &#34; ((double) quotation mark)
 $htmlEntities["&amp;"]      ="\x26"; // &#38; (ampersand)

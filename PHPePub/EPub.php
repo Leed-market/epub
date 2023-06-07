@@ -20,27 +20,27 @@
 use LeedPlugin\PHPePub\Logger;
 
 class EPub {
-    const VERSION = 3.20;
-    const REQ_ZIP_VERSION = 1.50;
+    public const VERSION = 3.20;
+    public const REQ_ZIP_VERSION = 1.50;
 
-    const IDENTIFIER_UUID = 'UUID';
-    const IDENTIFIER_URI = 'URI';
-    const IDENTIFIER_ISBN = 'ISBN';
+    public const IDENTIFIER_UUID = 'UUID';
+    public const IDENTIFIER_URI = 'URI';
+    public const IDENTIFIER_ISBN = 'ISBN';
 
     /** Ignore all external references, and do not process the file for these */
-    const EXTERNAL_REF_IGNORE = 0;
+    public const EXTERNAL_REF_IGNORE = 0;
     /** Process the file for external references and add them to the book */
-    const EXTERNAL_REF_ADD = 1;
+    public const EXTERNAL_REF_ADD = 1;
     /** Process the file for external references and add them to the book, but remove images, and img tags */
-    const EXTERNAL_REF_REMOVE_IMAGES = 2;
+    public const EXTERNAL_REF_REMOVE_IMAGES = 2;
     /** Process the file for external references and add them to the book, but replace images, and img tags with [image] */
-    const EXTERNAL_REF_REPLACE_IMAGES = 3;
+    public const EXTERNAL_REF_REPLACE_IMAGES = 3;
 
-    const DIRECTION_LEFT_TO_RIGHT = "ltr";
-    const DIRECTION_RIGHT_TO_LEFT = "rtl";
+    public const DIRECTION_LEFT_TO_RIGHT = "ltr";
+    public const DIRECTION_RIGHT_TO_LEFT = "rtl";
 
-	const BOOK_VERSION_EPUB2 = "2.0";
-    const BOOK_VERSION_EPUB3 = "3.0";
+	public const BOOK_VERSION_EPUB2 = "2.0";
+    public const BOOK_VERSION_EPUB3 = "3.0";
 
     private $bookVersion = EPub::BOOK_VERSION_EPUB2;
 
@@ -83,7 +83,7 @@ class EPub {
 	private $tocAddReferences = FALSE;
 	private $tocCssFileName = NULL;
 
-    private $fileList = array();
+    private $fileList = [];
     private $writingDirection = EPub::DIRECTION_LEFT_TO_RIGHT;
     private $languageCode = "en";
 
@@ -113,19 +113,14 @@ class EPub {
 
     public $encodeHTML = FALSE;
 
-    private $mimetypes = array(
-        "js" => "application/x-javascript", "swf" => "application/x-shockwave-flash", "xht" => "application/xhtml+xml", "xhtml" => "application/xhtml+xml", "zip" => "application/zip",
-        "aif" => "audio/x-aiff", "aifc" => "audio/x-aiff", "aiff" => "audio/x-aiff", "au" => "audio/basic", "kar" => "audio/midi", "m3u" => "audio/x-mpegurl", "mid" => "audio/midi", "midi" => "audio/midi", "mp2" => "audio/mpeg", "mp3" => "audio/mpeg", "mpga" => "audio/mpeg", "oga" => "audio/ogg", "ogg" => "audio/ogg", "ra" => "audio/x-realaudio", "ram" => "audio/x-pn-realaudio", "rm" => "audio/x-pn-realaudio", "rpm" => "audio/x-pn-realaudio-plugin", "snd" => "audio/basic", "wav" => "audio/x-wav",
-        "bmp" => "image/bmp", "djv" => "image/vnd.djvu", "djvu" => "image/vnd.djvu", "gif" => "image/gif", "ief" => "image/ief", "jpe" => "image/jpeg", "jpeg" => "image/jpeg", "jpg" => "image/jpeg", "pbm" => "image/x-portable-bitmap", "pgm" => "image/x-portable-graymap", "png" => "image/png", "pnm" => "image/x-portable-anymap", "ppm" => "image/x-portable-pixmap", "ras" => "image/x-cmu-raster", "rgb" => "image/x-rgb", "tif" => "image/tif", "tiff" => "image/tiff", "wbmp" => "image/vnd.wap.wbmp", "xbm" => "image/x-xbitmap", "xpm" => "image/x-xpixmap", "xwd" => "image/x-windowdump",
-        "asc" => "text/plain", "css" => "text/css", "etx" => "text/x-setext", "htm" => "text/html", "html" => "text/html", "rtf" => "text/rtf", "rtx" => "text/richtext", "sgm" => "text/sgml", "sgml" => "text/sgml", "tsv" => "text/tab-seperated-values", "txt" => "text/plain", "wml" => "text/vnd.wap.wml", "wmls" => "text/vnd.wap.wmlscript", "xml" => "text/xml", "xsl" => "text/xml",
-        "avi" => "video/x-msvideo", "mov" => "video/quicktime", "movie" => "video/x-sgi-movie", "mp4" => "video/mp4", "mpe" => "video/mpeg", "mpeg" => "video/mpeg", "mpg" => "video/mpeg", "mxu" => "video/vnd.mpegurl", "ogv" => "video/ogg", "qt" => "video/quicktime", "webm" => "video/webm");
+    private $mimetypes = ["js" => "application/x-javascript", "swf" => "application/x-shockwave-flash", "xht" => "application/xhtml+xml", "xhtml" => "application/xhtml+xml", "zip" => "application/zip", "aif" => "audio/x-aiff", "aifc" => "audio/x-aiff", "aiff" => "audio/x-aiff", "au" => "audio/basic", "kar" => "audio/midi", "m3u" => "audio/x-mpegurl", "mid" => "audio/midi", "midi" => "audio/midi", "mp2" => "audio/mpeg", "mp3" => "audio/mpeg", "mpga" => "audio/mpeg", "oga" => "audio/ogg", "ogg" => "audio/ogg", "ra" => "audio/x-realaudio", "ram" => "audio/x-pn-realaudio", "rm" => "audio/x-pn-realaudio", "rpm" => "audio/x-pn-realaudio-plugin", "snd" => "audio/basic", "wav" => "audio/x-wav", "bmp" => "image/bmp", "djv" => "image/vnd.djvu", "djvu" => "image/vnd.djvu", "gif" => "image/gif", "ief" => "image/ief", "jpe" => "image/jpeg", "jpeg" => "image/jpeg", "jpg" => "image/jpeg", "pbm" => "image/x-portable-bitmap", "pgm" => "image/x-portable-graymap", "png" => "image/png", "pnm" => "image/x-portable-anymap", "ppm" => "image/x-portable-pixmap", "ras" => "image/x-cmu-raster", "rgb" => "image/x-rgb", "tif" => "image/tif", "tiff" => "image/tiff", "wbmp" => "image/vnd.wap.wbmp", "xbm" => "image/x-xbitmap", "xpm" => "image/x-xpixmap", "xwd" => "image/x-windowdump", "asc" => "text/plain", "css" => "text/css", "etx" => "text/x-setext", "htm" => "text/html", "html" => "text/html", "rtf" => "text/rtf", "rtx" => "text/richtext", "sgm" => "text/sgml", "sgml" => "text/sgml", "tsv" => "text/tab-seperated-values", "txt" => "text/plain", "wml" => "text/vnd.wap.wml", "wmls" => "text/vnd.wap.wmlscript", "xml" => "text/xml", "xsl" => "text/xml", "avi" => "video/x-msvideo", "mov" => "video/quicktime", "movie" => "video/x-sgi-movie", "mp4" => "video/mp4", "mpe" => "video/mpeg", "mpeg" => "video/mpeg", "mpg" => "video/mpeg", "mxu" => "video/vnd.mpegurl", "ogv" => "video/ogg", "qt" => "video/quicktime", "webm" => "video/webm"];
 
     // These are the ONLY allowed types in that these are the ones ANY reader must support, any other MUST have the fallback attribute pointing to one of these.
-    private $coreMediaTypes = array("image/gif", "image/jpeg", "image/png", "image/svg+xml", "application/xhtml+xml", "application/x-dtbook+xml", "application/xml", "application/x-dtbncx+xml", "text/css", "text/x-oeb1-css", "text/x-oeb1-document");
+    private $coreMediaTypes = ["image/gif", "image/jpeg", "image/png", "image/svg+xml", "application/xhtml+xml", "application/x-dtbook+xml", "application/xml", "application/x-dtbncx+xml", "text/css", "text/x-oeb1-css", "text/x-oeb1-document"];
 
-    private $opsContentTypes = array("application/xhtml+xml", "application/x-dtbook+xml", "application/xml", "application/x-dtbncx+xml", "text/x-oeb1-document");
+    private $opsContentTypes = ["application/xhtml+xml", "application/x-dtbook+xml", "application/xml", "application/x-dtbncx+xml", "text/x-oeb1-document"];
 
-    private $forbiddenCharacters = array("?", "[", "]", "/", "\\", "=", "<", ">", ":", ";", ",", "'", "\"", "&", "$", "#", "*", "(", ")", "|", "~", "`", "!", "{", "}", "%");
+    private $forbiddenCharacters = ["?", "[", "]", "/", "\\", "=", "<", ">", ":", ";", ",", "'", "\"", "&", "$", "#", "*", "(", ")", "|", "~", "`", "!", "{", "}", "%"];
 
 	private $htmlContentHeader = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"\n    \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n<title></title>\n</head>\n<body>\n";
 	private $htmlContentFooter = "</body>\n</html>\n";
@@ -193,24 +188,7 @@ class EPub {
 	 * initialize defaults.
 	 */
     private function initialize() {
-        $this->referencesOrder = array(
-			Reference::COVER => "Cover Page",
-			Reference::TITLE_PAGE => "Title Page",
-			Reference::ACKNOWLEDGEMENTS => "Acknowledgements",
-			Reference::BIBLIOGRAPHY => "Bibliography",
-			Reference::COLOPHON => "Colophon",
-			Reference::COPYRIGHT_PAGE => "Copyright",
-			Reference::DEDICATION => "Dedication",
-			Reference::EPIGRAPH => "Epigraph",
-			Reference::FOREWORD => "Foreword",
-			Reference::TABLE_OF_CONTENTS => "Table of Contents",
-			Reference::NOTES => "Notes",
-			Reference::PREFACE => "Preface",
-			Reference::TEXT => "First Page",
-			Reference::LIST_OF_ILLUSTRATIONS => "List of Illustrations",
-			Reference::LIST_OF_TABLES => "List of Tables",
-			Reference::GLOSSARY => "Glossary",
-			Reference::INDEX => "Index");
+        $this->referencesOrder = [Reference::COVER => "Cover Page", Reference::TITLE_PAGE => "Title Page", Reference::ACKNOWLEDGEMENTS => "Acknowledgements", Reference::BIBLIOGRAPHY => "Bibliography", Reference::COLOPHON => "Colophon", Reference::COPYRIGHT_PAGE => "Copyright", Reference::DEDICATION => "Dedication", Reference::EPIGRAPH => "Epigraph", Reference::FOREWORD => "Foreword", Reference::TABLE_OF_CONTENTS => "Table of Contents", Reference::NOTES => "Notes", Reference::PREFACE => "Preface", Reference::TEXT => "First Page", Reference::LIST_OF_ILLUSTRATIONS => "List of Illustrations", Reference::LIST_OF_TABLES => "List of Tables", Reference::GLOSSARY => "Glossary", Reference::INDEX => "Index"];
 
         $this->docRoot = filter_input(INPUT_SERVER, "DOCUMENT_ROOT") . "/";
 
@@ -383,10 +361,13 @@ class EPub {
 
             $partCount = 0;
             $this->chapterCount++;
-
-            $oneChapter = each($chapter);
+            $oneChapter[1] = current($chapter);
+            $oneChapter['value'] = current($chapter);
+            $oneChapter[0] = key($chapter);
+            $oneChapter['key'] = key($chapter);
+            next($chapter);
             while ($oneChapter) {
-                list($k, $v) = $oneChapter;
+                [$k, $v] = $oneChapter;
                 if ($this->encodeHTML === TRUE) {
                     $v = $this->encodeHtml($v);
                 }
@@ -398,8 +379,11 @@ class EPub {
 				$partName = $name . "_" . $partCount;
                 $this->addFile($partName . "." . $extension, $partName, $v, "application/xhtml+xml");
                 $this->opf->addItemRef($partName);
-
-                $oneChapter = each($chapter);
+                $oneChapter[1] = current($chapter);
+                $oneChapter['value'] = current($chapter);
+                $oneChapter[0] = key($chapter);
+                $oneChapter['key'] = key($chapter);
+                next($chapter);
             }
 			$partName = $name . "_1." . $extension;
             $navPoint = new NavPoint($this->decodeHtmlEntities($chapterName), $partName, $partName);
@@ -606,7 +590,7 @@ class EPub {
         $imgPath = "images/" . $path["basename"];
 
         if (empty($mimetype) && file_exists($fileName)) {
-            list($width, $height, $type, $attr) = getimagesize($fileName);
+            [$width, $height, $type, $attr] = getimagesize($fileName);
             $mimetype = image_type_to_mime_type($type);
         }
         if (empty($mimetype)) {
@@ -902,7 +886,7 @@ class EPub {
             return FALSE;
         }
         // process img tags.
-        $postProcDomElememts = array();
+        $postProcDomElememts = [];
         $images = $xmlDoc->getElementsByTagName("img");
         $itemCount = $images->length;
 		
@@ -917,7 +901,7 @@ class EPub {
 				if ($altNode !== NULL && strlen($altNode->nodeValue) > 0) {
 					$alt = $altNode->nodeValue;
 				}
-                $postProcDomElememts[] = array($img, $this->createDomFragment($xmlDoc, "<em>[" . $alt . "]</em>"));
+                $postProcDomElememts[] = [$img, $this->createDomFragment($xmlDoc, "<em>[" . $alt . "]</em>")];
             } else {
                 $source = $img->attributes->getNamedItem("src")->nodeValue;
 
@@ -966,7 +950,7 @@ class EPub {
 			$externalReferences = EPub::EXTERNAL_REF_REMOVE_IMAGES;
 		}
 		
-		$postProcDomElememts = array();
+		$postProcDomElememts = [];
 		$images = $xmlDoc->getElementsByTagName("source");
 		$itemCount = $images->length;
 		for ($idx = 0; $idx < $itemCount; $idx++) {
@@ -979,7 +963,7 @@ class EPub {
 				if ($altNode !== NULL && strlen($altNode->nodeValue) > 0) {
 					$alt = $altNode->nodeValue;
 				}
-				$postProcDomElememts[] = array($img, $this->createDomFragment($xmlDoc, "[" . $alt . "]"));
+				$postProcDomElememts[] = [$img, $this->createDomFragment($xmlDoc, "[" . $alt . "]")];
 			} else {
 				$source = $img->attributes->getNamedItem("src")->nodeValue;
 
@@ -1070,6 +1054,7 @@ class EPub {
      * @param string $backPath The path to get back to the root of the archive from $htmlDir.
      */
     protected function resolveMedia($source, &$internalPath, &$internalSrc, &$isSourceExternal, $baseDir = "", $htmlDir = "", $backPath = "") {
+        $tmpFile = null;
         if ($this->isFinalized) {
             return FALSE;
         }
@@ -1700,12 +1685,12 @@ class EPub {
         }
         $tocData .= ">\n";
 
-        while (list($item, $descriptive) = each($this->referencesOrder)) {
+        foreach ($this->referencesOrder as $item => $descriptive) {
             if ($item === "text") {
-                while (list($chapterName, $navPoint) = each($this->ncx->chapterList)) {
-					$fileName = $navPoint->getContentSrc();
-					$level = $navPoint->getLevel() -2;
-					$tocData .= "\t<p>" . str_repeat(" &#160;  &#160;  &#160;", $level) . "<a href=\"" . $fileName . "\">" . $chapterName . "</a></p>\n";
+                foreach ($this->ncx->chapterList as $chapterName => $navPoint) {
+                    $fileName = $navPoint->getContentSrc();
+                    $level = $navPoint->getLevel() -2;
+                    $tocData .= "\t<p>" . str_repeat(" &#160;  &#160;  &#160;", $level) . "<a href=\"" . $fileName . "\">" . $chapterName . "</a></p>\n";
                 }
             } else if ($this->tocAddReferences === TRUE) {
                 if (array_key_exists($item, $this->ncx->referencesList)) {
@@ -1844,7 +1829,9 @@ class EPub {
         }
 
 		reset($this->ncx->chapterList);
-        list($firstChapterName, $firstChapterNavPoint) = each($this->ncx->chapterList);
+  $firstChapterName = key($this->ncx->chapterList);
+  $firstChapterNavPoint = current($this->ncx->chapterList);
+  next($this->ncx->chapterList);
 		$firstChapterFileName = $firstChapterNavPoint->getContentSrc();
         $this->opf->addReference(Reference::TEXT, $this->decodeHtmlEntities($firstChapterName), $firstChapterFileName);
 
@@ -2164,18 +2151,14 @@ class EPub {
         }
 
 		if ($ext === "") {
-			static $mimeToExt = array (
-				'image/jpeg' => 'jpg',
-				'image/gif' => 'gif',
-				'image/png' => 'png'
-            );
+			static $mimeToExt = ['image/jpeg' => 'jpg', 'image/gif' => 'gif', 'image/png' => 'png'];
 
 			if (isset($mimeToExt[$mime])) {
 				$ext = $mimeToExt[$mime];
 			}
 		}
 
-        $rv = array();
+        $rv = [];
         $rv['width'] = $width*$ratio;
         $rv['height'] = $height*$ratio;
         $rv['mime'] = $mime;
@@ -2199,7 +2182,7 @@ class EPub {
 			$outFile = NULL;
 			$fp = NULL;
 			$res = FALSE;
-			$info = array('http_code' => 500);
+			$info = ['http_code' => 500];
 			
 		    curl_setopt($ch, CURLOPT_HEADER, 0); 
             curl_setopt($ch, CURLOPT_URL, str_replace(" ","%20",$source));
@@ -2255,14 +2238,7 @@ class EPub {
                 $binary, $hits)) {
             return 'application/octet-stream';
         }
-        static $type = array (
-            1 => 'image/jpeg',
-            2 => 'image/gif',
-            3 => 'image/png',
-            4 => 'image/x-windows-bmp',
-            5 => 'image/tiff',
-            6 => 'image/x-ilbm',
-        );
+        static $type = [1 => 'image/jpeg', 2 => 'image/gif', 3 => 'image/png', 4 => 'image/x-windows-bmp', 5 => 'image/tiff', 6 => 'image/x-ilbm'];
         return $type[count($hits) - 1];
     }
 

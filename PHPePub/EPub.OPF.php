@@ -8,23 +8,23 @@
  * @version 3.20
  */
 class Opf {
-    const _VERSION = 3.20;
+    public const _VERSION = 3.20;
 
     /* Core Media types.
      * These types are the only guaranteed mime types any ePub reader must understand.
     * Any other type muse define a fall back whose fallback chain will end in one of these.
     */
-    const TYPE_GIF = "image/gif";
-    const TYPE_JPEG = "image/jpeg";
-    const TYPE_PNG = "image/png";
-    const TYPE_SVG = "image/svg+xml";
-    const TYPE_XHTML = "application/xhtml+xml";
-    const TYPE_DTBOOK = "application/x-dtbook+xml";
-    const TYPE_CSS = "text/css";
-    const TYPE_XML = "application/xml";
-    const TYPE_OEB1_DOC = "text/x-oeb1-document"; // Deprecated
-    const TYPE_OEB1_CSS = "text/x-oeb1-css"; // Deprecated
-    const TYPE_NCX = "application/x-dtbncx+xml";
+    public const TYPE_GIF = "image/gif";
+    public const TYPE_JPEG = "image/jpeg";
+    public const TYPE_PNG = "image/png";
+    public const TYPE_SVG = "image/svg+xml";
+    public const TYPE_XHTML = "application/xhtml+xml";
+    public const TYPE_DTBOOK = "application/x-dtbook+xml";
+    public const TYPE_CSS = "text/css";
+    public const TYPE_XML = "application/xml";
+    public const TYPE_OEB1_DOC = "text/x-oeb1-document"; // Deprecated
+    public const TYPE_OEB1_CSS = "text/x-oeb1-css"; // Deprecated
+    public const TYPE_NCX = "application/x-dtbncx+xml";
 
     private $bookVersion = EPub::BOOK_VERSION_EPUB2;
 	private $ident = "BookId";
@@ -230,10 +230,10 @@ class Opf {
  * ePub OPF Metadata structures
  */
 class Metadata {
-    const _VERSION = 3.00;
+    public const _VERSION = 3.00;
 
-    private $dc = array();
-    private $meta = array();
+    private $dc = [];
+    private $meta = [];
 
     /**
      * Class constructor.
@@ -277,7 +277,7 @@ class Metadata {
             $content = is_string($content) ? trim($content) : NULL;
         }
         if (isset($content)) {
-            $this->meta[] = array ($name => $content);
+            $this->meta[] = [$name => $content];
         }
     }
 
@@ -304,7 +304,9 @@ class Metadata {
         }
 
         foreach ($this->meta as $data) {
-            list($name, $content) = each($data);
+            $name = key($data);
+            $content = current($data);
+            next($data);
             $metadata .= "\t\t<meta name=\"" . $name . "\" content=\"" . $content . "\" />\n";
         }
 
@@ -316,28 +318,28 @@ class Metadata {
  * ePub OPF Dublin Core (dc:) Metadata structures
  */
 class DublinCore {
-    const _VERSION = 3.00;
+    public const _VERSION = 3.00;
 
-    const CONTRIBUTOR = "contributor";
-    const COVERAGE = "coverage";
-    const CREATOR = "creator";
-    const DATE = "date";
-    const DESCRIPTION = "description";
-    const FORMAT = "format";
-    const IDENTIFIER = "identifier";
-    const LANGUAGE = "language";
-    const PUBLISHER = "publisher";
-    const RELATION = "relation";
-    const RIGHTS = "rights";
-    const SOURCE = "source";
-    const SUBJECT = "subject";
-    const TITLE = "title";
-    const TYPE = "type";
+    public const CONTRIBUTOR = "contributor";
+    public const COVERAGE = "coverage";
+    public const CREATOR = "creator";
+    public const DATE = "date";
+    public const DESCRIPTION = "description";
+    public const FORMAT = "format";
+    public const IDENTIFIER = "identifier";
+    public const LANGUAGE = "language";
+    public const PUBLISHER = "publisher";
+    public const RELATION = "relation";
+    public const RIGHTS = "rights";
+    public const SOURCE = "source";
+    public const SUBJECT = "subject";
+    public const TITLE = "title";
+    public const TYPE = "type";
 
     private $dcName = NULL;
     private $dcValue = NULL;
-    private $attr = array();
-    private $opfAttr = array();
+    private $attr = [];
+    private $opfAttr = [];
 
     /**
      * Class constructor.
@@ -418,13 +420,13 @@ class DublinCore {
         $dc = "\t\t<dc:" . $this->dcName;
 
         if (sizeof($this->attr) > 0) {
-            while (list($name, $content) = each($this->attr)) {
+            foreach ($this->attr as $name => $content) {
                 $dc .= " " . $name . "=\"" . $content . "\"";
             }
         }
 
         if ($bookVersion === EPub::BOOK_VERSION_EPUB2 && sizeof($this->opfAttr) > 0) {
-            while (list($name, $content) = each($this->opfAttr)) {
+            foreach ($this->opfAttr as $name => $content) {
                 $dc .= " opf:" . $name . "=\"" . $content . "\"";
             }
         }
@@ -437,9 +439,9 @@ class DublinCore {
  * ePub OPF Manifest structure
  */
 class Manifest {
-    const _VERSION = 3.00;
+    public const _VERSION = 3.00;
 
-    private $items = array();
+    private $items = [];
 
     /**
      * Class constructor.
@@ -488,7 +490,7 @@ class Manifest {
  * ePub OPF Item structure
  */
 class Item {
-    const _VERSION = 3.00;
+    public const _VERSION = 3.00;
 
     private $id = NULL;
     private $href = NULL;
@@ -631,9 +633,9 @@ class Item {
  * ePub OPF Spine structure
  */
 class Spine {
-    const _VERSION = 1.00;
+    public const _VERSION = 1.00;
 
-    private $itemrefs = array();
+    private $itemrefs = [];
     private $toc = NULL;
 
     /**
@@ -698,7 +700,7 @@ class Spine {
  * ePub OPF ItemRef structure
  */
 class Itemref {
-    const _VERSION = 3.00;
+    public const _VERSION = 3.00;
 
     private $idref = NULL;
     private $linear = TRUE;
@@ -771,9 +773,9 @@ class Itemref {
  * ePub OPF Guide structure
  */
 class Guide {
-    const _VERSION = 3.00;
+    public const _VERSION = 3.00;
 
-    private $references = array();
+    private $references = [];
 
     /**
      * Class constructor.
@@ -836,58 +838,58 @@ class Guide {
  * Reference constants
  */
 class Reference {
-    const _VERSION = 1.00;
+    public const _VERSION = 1.00;
 
     /* REFERENCE types are derived from the "Chicago Manual of Style"
      */
 
     /** Acknowledgements page */
-    const ACKNOWLEDGEMENTS = "acknowledgements";
+    public const ACKNOWLEDGEMENTS = "acknowledgements";
 
     /** Bibliography page */
-    const BIBLIOGRAPHY = "bibliography";
+    public const BIBLIOGRAPHY = "bibliography";
 
     /** Colophon page */
-    const COLOPHON = "colophon";
+    public const COLOPHON = "colophon";
 
     /** Copyright page */
-    const COPYRIGHT_PAGE = "copyright-page";
+    public const COPYRIGHT_PAGE = "copyright-page";
 
     /** Dedication */
-    const DEDICATION = "dedication";
+    public const DEDICATION = "dedication";
 
     /** Epigraph */
-    const EPIGRAPH = "epigraph";
+    public const EPIGRAPH = "epigraph";
 
     /** Foreword */
-    const FOREWORD = "foreword";
+    public const FOREWORD = "foreword";
 
     /** Glossary page */
-    const GLOSSARY = "glossary";
+    public const GLOSSARY = "glossary";
 
     /** back-of-book style index */
-    const INDEX = "index";
+    public const INDEX = "index";
 
     /** List of illustrations */
-    const LIST_OF_ILLUSTRATIONS = "loi";
+    public const LIST_OF_ILLUSTRATIONS = "loi";
 
     /** List of tables */
-    const LIST_OF_TABLES = "lot";
+    public const LIST_OF_TABLES = "lot";
 
     /** Notes page */
-    const NOTES = "notes";
+    public const NOTES = "notes";
 
     /** Preface page */
-    const PREFACE = "preface";
+    public const PREFACE = "preface";
 
     /** Table of contents */
-    const TABLE_OF_CONTENTS = "toc";
+    public const TABLE_OF_CONTENTS = "toc";
 
     /** Page with possibly title, author, publisher, and other metadata */
-    const TITLE_PAGE = "titlepage";
+    public const TITLE_PAGE = "titlepage";
 
     /** First page of the book, ie. first page of the first chapter */
-    const TEXT = "text";
+    public const TEXT = "text";
 
 	// ******************
 	// ePub3 constants
@@ -895,16 +897,16 @@ class Reference {
 
 	// Document partitions
 	/** The publications cover(s), jacket information, etc. This is officially in ePub3, but works for ePub 2 as well */
-	const COVER = "cover";
+	public const COVER = "cover";
 
 	/** Preliminary material to the content body, such as tables of contents, dedications, etc. */
-	const FRONTMATTER = "frontmatter";
+	public const FRONTMATTER = "frontmatter";
 
 	/** The main (body) content of a document. */
-	const BODYMATTER = "bodymatter";
+	public const BODYMATTER = "bodymatter";
 
 	/** Ancillary material occurring after the document body, such as indices, appendices, etc. */
-	const BACKMATTER = "backmatter";
+	public const BACKMATTER = "backmatter";
 
 
 	private $type = NULL;
@@ -979,7 +981,7 @@ class Reference {
  * Ref: http://www.loc.gov/marc/relators/
  */
 class MarcCode {
-    const _VERSION = 3.00;
+    public const _VERSION = 3.00;
 
     /**
      * Adapter
@@ -988,14 +990,14 @@ class MarcCode {
      * 1) reworks a musical composition, usually for a different medium, or
      * 2) rewrites novels or stories for motion pictures or other audiovisual medium.
      */
-    const ADAPTER = "adp";
+    public const ADAPTER = "adp";
 
     /**
      * Annotator
      *
      * Use for a person who writes manuscript annotations on a printed item.
      */
-    const ANNOTATOR = "ann";
+    public const ANNOTATOR = "ann";
 
     /**
      * Arranger
@@ -1004,7 +1006,7 @@ class MarcCode {
      *  medium from that of the original; in an arrangement the musical substance remains
      *  essentially unchanged.
      */
-    const ARRANGER = "arr";
+    public const ARRANGER = "arr";
 
     /**
      * Artist
@@ -1013,7 +1015,7 @@ class MarcCode {
      *  an original graphic design or work of art, if specific codes (e.g., [egr],
      *  [etr]) are not desired. For book illustrators, prefer Illustrator [ill].
      */
-    const ARTIST = "art";
+    public const ARTIST = "art";
 
     /**
      * Associated name
@@ -1022,7 +1024,7 @@ class MarcCode {
      *  collection, or which cannot be determined to be that of a Former owner [fmo]
      *  or other designated relator indicative of provenance.
      */
-    const ASSOCIATED_NAME = "asn";
+    public const ASSOCIATED_NAME = "asn";
 
     /**
      * Author
@@ -1031,7 +1033,7 @@ class MarcCode {
      *  or artistic content of a work. This term may also be used when more than one
      *  person or body bears such responsibility.
      */
-    const AUTHOR = "aut";
+    public const AUTHOR = "aut";
 
     /**
      * Author in quotations or text extracts
@@ -1040,7 +1042,7 @@ class MarcCode {
      *  he or she did not contribute directly. Such quotations are found particularly
      *  in exhibition catalogs, collections of photographs, etc.
      */
-    const AUTHOR_IN_QUOTES = "aqt";
+    public const AUTHOR_IN_QUOTES = "aqt";
 
     /**
      * Author of afterword, colophon, etc.
@@ -1048,7 +1050,7 @@ class MarcCode {
      * Use for a person or corporate body responsible for an afterword, postface,
      *  colophon, etc. but who is not the chief author of a work.
      */
-    const AUTHOR_OF_AFTERWORD = "aft";
+    public const AUTHOR_OF_AFTERWORD = "aft";
 
     /**
      * Author of introduction, etc.
@@ -1056,7 +1058,7 @@ class MarcCode {
      * Use for a person or corporate body responsible for an introduction, preface,
      *  foreword, or other critical matter, but who is not the chief author.
      */
-    const AUTHOR_OF_INTRO = "aui";
+    public const AUTHOR_OF_INTRO = "aui";
 
     /**
      * Bibliographic antecedent
@@ -1065,7 +1067,7 @@ class MarcCode {
      *  the catalog record is based. This can be appropriate for adaptations, sequels,
      *  continuations, indexes, etc.
      */
-    const BIB_ANTECEDENT = "ant";
+    public const BIB_ANTECEDENT = "ant";
 
     /**
      * Book producer
@@ -1073,7 +1075,7 @@ class MarcCode {
      * Use for the person or firm responsible for the production of books and other
      *  print media, if specific codes (e.g., [bkd], [egr], [tyd], [prt]) are not desired.
      */
-    const BOOK_PRODUCER = "bkp";
+    public const BOOK_PRODUCER = "bkp";
 
     /**
      * Collaborator
@@ -1082,7 +1084,7 @@ class MarcCode {
      *  of a work of another author or that brings complements (e.g., appendices, notes)
      *  to the work of another author.
      */
-    const COLABORATOR = "clb";
+    public const COLABORATOR = "clb";
 
     /**
      * Commentator
@@ -1092,7 +1094,7 @@ class MarcCode {
      *  Compiler [com] Use for a person who produces a work or publication by selecting
      *  and putting together material from the works of various persons or bodies.
      */
-    const COMMENTATOR = "cmm";
+    public const COMMENTATOR = "cmm";
 
     /**
      * Designer
@@ -1100,7 +1102,7 @@ class MarcCode {
      * Use for a person or organization responsible for design if specific codes (e.g.,
      *  [bkd], [tyd]) are not desired.
      */
-    const DESIGNER = "dsr";
+    public const DESIGNER = "dsr";
 
     /**
      * Editor
@@ -1109,7 +1111,7 @@ class MarcCode {
      *  such as by elucidating text, adding introductory or other critical matter, or
      *  technically directing an editorial staff.
      */
-    const EDITORT = "edt";
+    public const EDITORT = "edt";
 
     /**
      * Illustrator
@@ -1117,14 +1119,14 @@ class MarcCode {
      * Use for the person who conceives, and perhaps also implements, a design or
      *  illustration, usually to accompany a written text.
      */
-    const ILLUSTRATOR = "ill";
+    public const ILLUSTRATOR = "ill";
 
     /**
      * Lyricist
      *
      * Use for the writer of the text of a song.
      */
-    const LYRICIST = "lyr";
+    public const LYRICIST = "lyr";
 
     /**
      * Metadata contact
@@ -1133,7 +1135,7 @@ class MarcCode {
      *  maintaining the original description of a metadata set (e.g., geospatial
      *  metadata set).
      */
-    const METADATA_CONTACT = "mdc";
+    public const METADATA_CONTACT = "mdc";
 
     /**
      * Musician
@@ -1142,7 +1144,7 @@ class MarcCode {
      *  of a work when it is not possible or desirable to identify the function more
      *  precisely.
      */
-    const MUSICIAN = "mus";
+    public const MUSICIAN = "mus";
 
     /**
      * Narrator
@@ -1150,7 +1152,7 @@ class MarcCode {
      * Use for the speaker who relates the particulars of an act, occurrence, or
      *  course of events.
      */
-    const NARRATOR = "nrt";
+    public const NARRATOR = "nrt";
 
     /**
      * Other
@@ -1158,7 +1160,7 @@ class MarcCode {
      * Use for relator codes from other lists which have no equivalent in the MARC
      *  list or for terms which have not been assigned a code.
      */
-    const OTHER = "oth";
+    public const OTHER = "oth";
 
     /**
      * Photographer
@@ -1166,14 +1168,14 @@ class MarcCode {
      * Use for the person or organization responsible for taking photographs, whether
      *  they are used in their original form or as reproductions.
      */
-    const PHOTOGRAPHER = "pht";
+    public const PHOTOGRAPHER = "pht";
 
     /**
      * Printer
      *
      * Use for the person or organization who prints texts, whether from type or plates.
      */
-    const PRINTER = "prt";
+    public const PRINTER = "prt";
 
     /**
      * Redactor
@@ -1181,7 +1183,7 @@ class MarcCode {
      * Use for a person who writes or develops the framework for an item without
      *  being intellectually responsible for its content.
      */
-    const REDACTOR = "red";
+    public const REDACTOR = "red";
 
     /**
      * Reviewer
@@ -1189,7 +1191,7 @@ class MarcCode {
      * Use for a person or corporate body responsible for the review of book, motion
      *  picture, performance, etc.
      */
-    const REVIEWER = "rev";
+    public const REVIEWER = "rev";
 
     /**
      * Sponsor
@@ -1197,7 +1199,7 @@ class MarcCode {
      * Use for the person or agency that issued a contract, or under whose auspices
      *  a work has been written, printed, published, etc.
      */
-    const SPONSOR = "spn";
+    public const SPONSOR = "spn";
 
     /**
      * Thesis advisor
@@ -1205,7 +1207,7 @@ class MarcCode {
      * Use for the person under whose supervision a degree candidate develops and
      *  presents a thesis, memoir, or text of a dissertation.
      */
-    const THESIS_ADVISOR = "ths";
+    public const THESIS_ADVISOR = "ths";
 
     /**
      * Transcriber
@@ -1213,7 +1215,7 @@ class MarcCode {
      * Use for a person who prepares a handwritten or typewritten copy from original
      *  material, including from dictated or orally recorded material.
      */
-    const TRANSCRIBER = "trc";
+    public const TRANSCRIBER = "trc";
 
     /**
      * Translator
@@ -1221,6 +1223,6 @@ class MarcCode {
      * Use for a person who renders a text from one language into another, or from
      *  an older form of a language into the modern form.
      */
-    const TRANSLATOR = "trl";
+    public const TRANSLATOR = "trl";
 }
 ?>

@@ -11,7 +11,7 @@
 namespace LeedPlugin\PHPePub;
 
 class Logger {
-    const VERSION = 1.00;
+    public const VERSION = 1.00;
 
     private $log = "";
     private $tStart;

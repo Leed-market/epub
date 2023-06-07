@@ -8,15 +8,15 @@
  * @version 3.20
  */
 class Ncx {
-    const _VERSION = 3.20;
+    public const _VERSION = 3.20;
 
-    const MIMETYPE = "application/x-dtbncx+xml";
+    public const MIMETYPE = "application/x-dtbncx+xml";
 
     private $bookVersion = EPub::BOOK_VERSION_EPUB2;
 
     private $navMap = NULL;
     private $uid = NULL;
-    private $meta = array();
+    private $meta = [];
     private $docTitle = NULL;
     private $docAuthor = NULL;
 
@@ -26,12 +26,12 @@ class Ncx {
     private $languageCode = "en";
     private $writingDirection = EPub::DIRECTION_LEFT_TO_RIGHT;
 
-    public $chapterList = array();
+    public $chapterList = [];
     public $referencesTitle = "Guide";
     public $referencesClass = "references";
 	public $referencesId = "references";
-	public $referencesList = array();
-    public $referencesName = array();
+	public $referencesList = [];
+    public $referencesName = [];
     public $referencesOrder = NULL;
 
     /**
@@ -248,7 +248,7 @@ class Ncx {
         $content = is_string($content) ? trim($content) : NULL;
 
         if ($name != NULL && $content != NULL) {
-            $this->meta[] = array($name => $content);
+            $this->meta[] = [$name => $content];
         }
     }
 
@@ -275,7 +275,9 @@ class Ncx {
 
         if (sizeof($this->meta)) {
             foreach ($this->meta as $metaEntry) {
-                list($name, $content) = each($metaEntry);
+                $name = key($metaEntry);
+                $content = current($metaEntry);
+                next($metaEntry);
                 $ncx .= "\t\t<meta name=\"" . $name . "\" content=\"" . $content . "\" />\n";
             }
         }
@@ -331,13 +333,13 @@ class Ncx {
 			$this->rootLevel();
 			$this->subLevel($this->referencesTitle, $this->referencesId, $this->referencesClass);
 			$refId = 1;
-			while (list($item, $descriptive) = each($this->referencesOrder)) {
-				if (array_key_exists($item, $this->referencesList)) {
-					$name = (empty($this->referencesName[$item]) ? $descriptive : $this->referencesName[$item]);
-					$navPoint = new NavPoint($name, $this->referencesList[$item], "ref-" . $refId++);
-					$this->addNavPoint($navPoint);
-				}
-			}
+			foreach ($this->referencesOrder as $item => $descriptive) {
+       if (array_key_exists($item, $this->referencesList)) {
+   					$name = (empty($this->referencesName[$item]) ? $descriptive : $this->referencesName[$item]);
+   					$navPoint = new NavPoint($name, $this->referencesList[$item], "ref-" . $refId++);
+   					$this->addNavPoint($navPoint);
+   				}
+   }
 		}
 	}
 
@@ -355,15 +357,15 @@ class Ncx {
 					. "\t\t\t\t<ol>\n";
 
 			$li = "";
-			while (list($item, $descriptive) = each($this->referencesOrder)) {
-				if (array_key_exists($item, $this->referencesList)) {
-					$li .= "\t\t\t\t\t<li><a epub:type=\""
-							. $item
-							. "\" href=\"" . $this->referencesList[$item] . "\">"
-							. (empty($this->referencesName[$item]) ? $descriptive : $this->referencesName[$item])
-							. "</a></li>\n";
-				}
-			}
+			foreach ($this->referencesOrder as $item => $descriptive) {
+       if (array_key_exists($item, $this->referencesList)) {
+   					$li .= "\t\t\t\t\t<li><a epub:type=\""
+   							. $item
+   							. "\" href=\"" . $this->referencesList[$item] . "\">"
+   							. (empty($this->referencesName[$item]) ? $descriptive : $this->referencesName[$item])
+   							. "</a></li>\n";
+   				}
+   }
 			if (empty($li)) {
 				return "";
 			}
@@ -380,9 +382,9 @@ class Ncx {
  * ePub NavMap class
  */
 class NavMap {
-    const _VERSION = 3.00;
+    public const _VERSION = 3.00;
 
-    private $navPoints = array();
+    private $navPoints = [];
     private $navLevels = 0;
 	private $writingDirection = NULL;
 
@@ -506,14 +508,14 @@ class NavMap {
  * ePub NavPoint class
  */
 class NavPoint {
-    const _VERSION = 3.00;
+    public const _VERSION = 3.00;
 
     private $label = NULL;
     private $contentSrc = NULL;
     private $id = NULL;
     private $navClass = NULL;
     private $isNavHidden = FALSE;
-	private $navPoints = array();
+	private $navPoints = [];
 	private $parent = NULL;
 
     /**

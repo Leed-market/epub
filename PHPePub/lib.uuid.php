@@ -37,23 +37,23 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 
 class UUID {
-	const MD5  = 3;
-	const SHA1 = 5;
-	const clearVer = 15;  // 00001111  Clears all bits of version byte with AND
-	const clearVar = 63;  // 00111111  Clears all relevant bits of variant byte with AND
-	const varRes   = 224; // 11100000  Variant reserved for future use
-	const varMS    = 192; // 11000000  Microsft GUID variant
-	const varRFC   = 128; // 10000000  The RFC 4122 variant (this variant)
-	const varNCS   = 0;   // 00000000  The NCS compatibility variant
-	const version1 = 16;  // 00010000
-	const version3 = 48;  // 00110000
-	const version4 = 64;  // 01000000
-	const version5 = 80;  // 01010000
-	const interval = 0x01b21dd213814000; // Time (in 100ns steps) between the start of the UTC and Unix epochs
-	const nsDNS  = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
-	const nsURL  = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
-	const nsOID  = '6ba7b812-9dad-11d1-80b4-00c04fd430c8';
-	const nsX500 = '6ba7b814-9dad-11d1-80b4-00c04fd430c8';
+	public const MD5  = 3;
+	public const SHA1 = 5;
+	public const clearVer = 15;  // 00001111  Clears all bits of version byte with AND
+	public const clearVar = 63;  // 00111111  Clears all relevant bits of variant byte with AND
+	public const varRes   = 224; // 11100000  Variant reserved for future use
+	public const varMS    = 192; // 11000000  Microsft GUID variant
+	public const varRFC   = 128; // 10000000  The RFC 4122 variant (this variant)
+	public const varNCS   = 0;   // 00000000  The NCS compatibility variant
+	public const version1 = 16;  // 00010000
+	public const version3 = 48;  // 00110000
+	public const version4 = 64;  // 01000000
+	public const version5 = 80;  // 01010000
+	public const interval = 0x01b21dd213814000; // Time (in 100ns steps) between the start of the UTC and Unix epochs
+	public const nsDNS  = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
+	public const nsURL  = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
+	public const nsOID  = '6ba7b812-9dad-11d1-80b4-00c04fd430c8';
+	public const nsX500 = '6ba7b814-9dad-11d1-80b4-00c04fd430c8';
 	protected static $randomFunc = 'randomTwister';
 	protected static $randomSource = NULL;
 	//instance properties
@@ -282,7 +282,7 @@ class UUID {
 	}
 
 	public static function randomBytes($bytes) {
-		return call_user_func(array('self', self::$randomFunc), $bytes);
+		return call_user_func(['self', self::$randomFunc], $bytes);
 	}
 
 	protected static function randomTwister($bytes) {
@@ -290,7 +290,7 @@ class UUID {
 		 Randomness is returned as a string of bytes. */
 		$rand = "";
 		for ($a = 0; $a < $bytes; $a++) {
-			$rand .= chr(mt_rand(0, 255));
+			$rand .= chr(random_int(0, 255));
 		}
 		return $rand;
 	}

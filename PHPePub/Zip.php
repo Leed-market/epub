@@ -16,67 +16,67 @@
  * @version 1.50
  */
 class Zip {
-    const VERSION = 1.50;
+    public const VERSION = 1.50;
 
-    const ZIP_LOCAL_FILE_HEADER = "\x50\x4b\x03\x04"; // Local file header signature
-    const ZIP_CENTRAL_FILE_HEADER = "\x50\x4b\x01\x02"; // Central file header signature
-    const ZIP_END_OF_CENTRAL_DIRECTORY = "\x50\x4b\x05\x06\x00\x00\x00\x00"; //end of Central directory record
+    public const ZIP_LOCAL_FILE_HEADER = "\x50\x4b\x03\x04"; // Local file header signature
+    public const ZIP_CENTRAL_FILE_HEADER = "\x50\x4b\x01\x02"; // Central file header signature
+    public const ZIP_END_OF_CENTRAL_DIRECTORY = "\x50\x4b\x05\x06\x00\x00\x00\x00"; //end of Central directory record
 
-    const EXT_FILE_ATTR_DIR = 010173200020;  // Permission 755 drwxr-xr-x = (((S_IFDIR | 0755) << 16) | S_DOS_D);
-    const EXT_FILE_ATTR_FILE = 020151000040; // Permission 644 -rw-r--r-- = (((S_IFREG | 0644) << 16) | S_DOS_A);
+    public const EXT_FILE_ATTR_DIR = 010173200020;  // Permission 755 drwxr-xr-x = (((S_IFDIR | 0755) << 16) | S_DOS_D);
+    public const EXT_FILE_ATTR_FILE = 020151000040; // Permission 644 -rw-r--r-- = (((S_IFREG | 0644) << 16) | S_DOS_A);
 
-    const ATTR_VERSION_TO_EXTRACT = "\x14\x00"; // Version needed to extract
-    const ATTR_MADE_BY_VERSION = "\x1E\x03"; // Made By Version
+    public const ATTR_VERSION_TO_EXTRACT = "\x14\x00"; // Version needed to extract
+    public const ATTR_MADE_BY_VERSION = "\x1E\x03"; // Made By Version
 
 	// Unix file types
-	const S_IFIFO  = 0010000; // named pipe (fifo)
-	const S_IFCHR  = 0020000; // character special
-	const S_IFDIR  = 0040000; // directory
-	const S_IFBLK  = 0060000; // block special
-	const S_IFREG  = 0100000; // regular
-	const S_IFLNK  = 0120000; // symbolic link
-	const S_IFSOCK = 0140000; // socket
+	public const S_IFIFO  = 0010000; // named pipe (fifo)
+	public const S_IFCHR  = 0020000; // character special
+	public const S_IFDIR  = 0040000; // directory
+	public const S_IFBLK  = 0060000; // block special
+	public const S_IFREG  = 0100000; // regular
+	public const S_IFLNK  = 0120000; // symbolic link
+	public const S_IFSOCK = 0140000; // socket
 
 	// setuid/setgid/sticky bits, the same as for chmod:
 
-	const S_ISUID  = 0004000; // set user id on execution
-	const S_ISGID  = 0002000; // set group id on execution
-	const S_ISTXT  = 0001000; // sticky bit
+	public const S_ISUID  = 0004000; // set user id on execution
+	public const S_ISGID  = 0002000; // set group id on execution
+	public const S_ISTXT  = 0001000; // sticky bit
 
 	// And of course, the other 12 bits are for the permissions, the same as for chmod:
 	// When addding these up, you can also just write the permissions as a simgle octal number
 	// ie. 0755. The leading 0 specifies octal notation.
-	const S_IRWXU  = 0000700; // RWX mask for owner
-	const S_IRUSR  = 0000400; // R for owner
-	const S_IWUSR  = 0000200; // W for owner
-	const S_IXUSR  = 0000100; // X for owner
-	const S_IRWXG  = 0000070; // RWX mask for group
-	const S_IRGRP  = 0000040; // R for group
-	const S_IWGRP  = 0000020; // W for group
-	const S_IXGRP  = 0000010; // X for group
-	const S_IRWXO  = 0000007; // RWX mask for other
-	const S_IROTH  = 0000004; // R for other
-	const S_IWOTH  = 0000002; // W for other
-	const S_IXOTH  = 0000001; // X for other
-	const S_ISVTX  = 0001000; // save swapped text even after use
+	public const S_IRWXU  = 0000700; // RWX mask for owner
+	public const S_IRUSR  = 0000400; // R for owner
+	public const S_IWUSR  = 0000200; // W for owner
+	public const S_IXUSR  = 0000100; // X for owner
+	public const S_IRWXG  = 0000070; // RWX mask for group
+	public const S_IRGRP  = 0000040; // R for group
+	public const S_IWGRP  = 0000020; // W for group
+	public const S_IXGRP  = 0000010; // X for group
+	public const S_IRWXO  = 0000007; // RWX mask for other
+	public const S_IROTH  = 0000004; // R for other
+	public const S_IWOTH  = 0000002; // W for other
+	public const S_IXOTH  = 0000001; // X for other
+	public const S_ISVTX  = 0001000; // save swapped text even after use
 
 	// Filetype, sticky and permissions are added up, and shifted 16 bits left BEFORE adding the DOS flags.
 
 	// DOS file type flags, we really only use the S_DOS_D flag.
 
-	const S_DOS_A  = 0000040; // DOS flag for Archive
-	const S_DOS_D  = 0000020; // DOS flag for Directory
-	const S_DOS_V  = 0000010; // DOS flag for Volume
-	const S_DOS_S  = 0000004; // DOS flag for System
-	const S_DOS_H  = 0000002; // DOS flag for Hidden
-	const S_DOS_R  = 0000001; // DOS flag for Read Only
+	public const S_DOS_A  = 0000040; // DOS flag for Archive
+	public const S_DOS_D  = 0000020; // DOS flag for Directory
+	public const S_DOS_V  = 0000010; // DOS flag for Volume
+	public const S_DOS_S  = 0000004; // DOS flag for System
+	public const S_DOS_H  = 0000002; // DOS flag for Hidden
+	public const S_DOS_R  = 0000001; // DOS flag for Read Only
 
     private $zipMemoryThreshold = 1048576; // Autocreate tempfile if the zip data exceeds 1048576 bytes (1 MB)
 
     private $zipData = NULL;
     private $zipFile = NULL;
     private $zipComment = NULL;
-    private $cdRec = array(); // central directory
+    private $cdRec = []; // central directory
     private $offset = 0;
     private $isFinalized = FALSE;
     private $addExtraField = TRUE;
@@ -261,7 +261,7 @@ class Zip {
 	 * @param int    $extDirAttr     Permissions for directories.
 	 * @param int    $extFileAttr    Permissions for files.
      */
-    public function addDirectoryContent($realPath, $zipPath, $recursive = TRUE, $followSymlinks = TRUE, &$addedFiles = array(),
+    public function addDirectoryContent($realPath, $zipPath, $recursive = TRUE, $followSymlinks = TRUE, &$addedFiles = [],
 					$overrideFilePermissions = FALSE, $extDirAttr = self::EXT_FILE_ATTR_DIR, $extFileAttr = self::EXT_FILE_ATTR_FILE) {
         if (file_exists($realPath) && !isset($addedFiles[realpath($realPath)])) {
             if (is_dir($realPath)) {
@@ -328,7 +328,7 @@ class Zip {
             while (!feof($fh)) {
                 $this->addStreamData(fread($fh, $this->streamChunkSize));
             }
-            $this->closeStream($this->addExtraField);
+            $this->closeStream();
         }
         return TRUE;
     }
@@ -750,7 +750,7 @@ class Zip {
             $dirs = array_splice($dirs, 1);
         }
 
-        $newDirs = array();
+        $newDirs = [];
         foreach ($dirs as $dir) {
             if ($dir !== "..") {
                 $subOffset--;
