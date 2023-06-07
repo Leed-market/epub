@@ -7,6 +7,9 @@
  * @license GNU LGPL, Attribution required for commercial implementations, requested for everything else.
  * @version 1.00
  */
+
+namespace LeedPlugin\PHPePub;
+
 class Logger {
     const VERSION = 1.00;
 

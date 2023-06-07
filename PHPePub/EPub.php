@@ -16,6 +16,9 @@
  * @link https://github.com/Grandt/PHPePub
  * @uses Zip.php version 1.50; http://www.phpclasses.org/browse/package/6110.html or https://github.com/Grandt/PHPZip
  */
+
+use LeedPlugin\PHPePub\Logger;
+
 class EPub {
     const VERSION = 3.20;
     const REQ_ZIP_VERSION = 1.50;
