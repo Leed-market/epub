@@ -375,6 +375,7 @@ class EPub {
             $navPoint = new NavPoint($this->decodeHtmlEntities($chapterName), $fileName, "chapter" . $this->chapterCount);
             $this->ncx->addNavPoint($navPoint);
             $this->ncx->chapterList[$chapterName] = $navPoint;
+            return $navPoint;
         } else if (is_array($chapter)) {
             $fileNameParts = pathinfo($fileName);
             $extension = $fileNameParts['extension'];
@@ -405,6 +406,7 @@ class EPub {
             $this->ncx->addNavPoint($navPoint);
 
             $this->ncx->chapterList[$chapterName] = $navPoint;
+            return $navPoint;
         } else if (!isset($chapterData) && strpos($fileName, "#") > 0) {
             $this->chapterCount++;
             //$this->opf->addItemRef("chapter" . $this->chapterCount);
@@ -419,8 +421,9 @@ class EPub {
             $navPoint = new NavPoint($this->decodeHtmlEntities($chapterName), $fileName, "chapter" . $this->chapterCount);
             $this->ncx->addNavPoint($navPoint);
             $this->ncx->chapterList[$chapterName] = $navPoint;
-		}
-        return $navPoint;
+            return $navPoint;
+        }
+        return false;
     }
 
 	/**
